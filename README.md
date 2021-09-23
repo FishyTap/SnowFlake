@@ -6,7 +6,7 @@
   <h3 align="center">SnowFlake</h3>
 
   <p align="center">
-    **SnowFlake** is a Multi-Purpose bot with many Accessibilities, Features!
+    SnowFlake is a Multi-Purpose bot with many Accessibilities, Features!
     <br />
     <br />
     <a href="https://discord.com/api/oauth2/authorize?client_id=875635121770889257&permissions=36768832&scope=applications.commands%20bot">Invite</a>
@@ -25,14 +25,14 @@
 
 ## 🎶 Available music sources:
 
-- youtube`*`
-- bandcamp`*`
-- soundcloud`*`
-- twitch`*`
-- vimeo`*`
-- url`*`
-- spotify`*`
-- deezer`*`
+- youtube
+- bandcamp
+- soundcloud
+- twitch
+- vimeo
+- url
+- spotify
+- deezer
 
 
 ## 🔐 License
