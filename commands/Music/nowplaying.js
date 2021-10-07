@@ -1,4 +1,5 @@
 const { Client, Message, MessageEmbed } = require("discord.js");
+const yts = require("yt-search");
 const { progressbar } = require("../../utils/Progressbar");
 const pMs = require("pretty-ms");
 
@@ -47,7 +48,7 @@ module.exports = {
 				]
 			});
 		} else if (!player.queue.current) {
-			return interaction.editReply({
+			return message.channel.send({
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.REDHEX)
@@ -70,9 +71,18 @@ module.exports = {
 				aP = "enabled";
 			}
 
+			let trackUrl = track.uri;
+
+			let trackId = trackUrl.replace(
+				"https://www.youtube.com/watch?v=",
+				""
+			);
+
+			let video = await yts({ videoId: trackId });
+
 			let size = 25;
 			let line = "▬";
-			let slider = "🔶";
+			let slider = "🔘";
 
 			let loop;
 
@@ -80,7 +90,10 @@ module.exports = {
 			else if (player.trackRepeat) loop = "track";
 			else loop = "off";
 
-			let status = `**Volume:**  **\`${player.volume}%\`**  **|**  **Filter:**  **\`none\`**  **|**  **Loop:**  **\`${loop}\`**  **|**  **Autoplay:**  **\`${aP}\`**`;
+			let mode247;
+
+			if (player.twentyFourSeven) mode247 = "enabled";
+			else if (!player.twentyFourSeven) mode247 = "disabled";
 
 			message.channel.send({
 				embeds: [
@@ -88,23 +101,19 @@ module.exports = {
 						.setColor(process.env.SIGHEX)
 						.setTitle("🎵  **Now Playing**  🎵")
 						.setDescription(`**[${track.title}](${track.uri})**`)
-						.setThumbnail(track.displayThumbnail("3"))
-						.addField("📈  Status", status)
+						.setThumbnail(track.thumbnail)
+						.addField("🔊  Volume", `**\`${player.volume}%\`**`, true)
+						.addField("🧭  Equalizer", `**\`${player.filter}\`**`, true)
+						.addField("🔁  Loop", `**\`${loop}\`**`, true)
+						.addField("↪️  Autoplay", `**\`${aP}\`**`, true)
+						.addField("🍀  24/7", `**\`${mode247}\`**`, true)
+						.addField("\u200b", "\u200b", true)
+						.addField("👥  Views",`**\`${video.views.toLocaleString()}\`**`,true)
+						.addField("📅  Uploaded",`**\`${video.ago}\`**`,true)
+						.addField("\u200b", "\u200b", true)
 						.addField(
-							"_ _",
-							`**Duration: \`${pMs(position, {
-								verbose: true
-							})}/${pMs(duration, { verbose: true })}\`**`
-						)
-						.addField(
-							"_ _",
-							`**|**${progressbar(
-								duration,
-								position,
-								size,
-								line,
-								slider
-							)}**|**`
+							`**|**${progressbar(duration, position, size, line, slider)}**|**`,
+							`**Duration:  \`${pMs(position, {verbose: true})} / ${pMs(duration, { verbose: true })}\`**`
 						)
 				]
 			});

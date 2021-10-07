@@ -14,8 +14,10 @@ const chalk = require("chalk");
  * @returns
  */
 
-const Pagination = async (message, pages, buttons, timeOut, required, bool) => {
-	!bool ? (bool = "message") : bool;
+const Pagination = async (message, pages, buttons, timeOut, required, int) => {
+	let bool;
+	if (int === false) bool = "message";
+	else if (int === true) bool = "interaction";
 
 	if (bool === "message") {
 		if (!message)
@@ -259,15 +261,25 @@ const Pagination = async (message, pages, buttons, timeOut, required, bool) => {
 					});
 
 					collector.on("end", async (interaction) => {
-						await row.components.forEach((x) =>
-							x.setDisabled(true)
-						);
+						try {
+							await row.components.forEach((x) =>
+								x.setDisabled(true)
+							);
 
-						await interaction.deferUpdate();
-
-						await interaction.editReply({
-							components: [row]
-						});
+							await interaction.editReply({
+								components: [row]
+							});
+						} catch {
+							await interaction.followUp({
+								embeds: [
+									new MessageEmbed()
+										.setColor(process.env.REDHEX)
+										.setDescription(
+											"**You are unable to use these buttons anymore**"
+										)
+								]
+							});
+						}
 					});
 				});
 			return msg;
@@ -521,15 +533,25 @@ const Pagination = async (message, pages, buttons, timeOut, required, bool) => {
 					});
 
 					collector.on("end", async (interaction) => {
-						await row.components.forEach((x) =>
-							x.setDisabled(true)
-						);
+						try {
+							await row.components.forEach((x) =>
+								x.setDisabled(true)
+							);
 
-						await interaction.deferUpdate();
-
-						await interaction.editReply({
-							components: [row]
-						});
+							await interaction.editReply({
+								components: [row]
+							});
+						} catch {
+							await interaction.followUp({
+								embeds: [
+									new MessageEmbed()
+										.setColor(process.env.REDHEX)
+										.setDescription(
+											"**You are unable to use these buttons anymore**"
+										)
+								]
+							});
+						}
 					});
 				});
 			return msg;

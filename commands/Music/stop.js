@@ -5,7 +5,7 @@ module.exports = {
 	aliases: [],
 	cooldown: 0,
 	permissions: [],
-	usage: "<none>",
+	usage: "",
 	description: "Stops the client from playing anymore tracks",
 	/**
 	 * @param {Client} client
@@ -59,7 +59,7 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setDescription(`⏹️ **Track Stopped**`)
+						.setDescription(`⏹️ **Track stopped**`)
 				]
 			});
 		}

@@ -1,5 +1,4 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
-const pMs = require("pretty-ms");
 
 module.exports = {
 	name: "play",
@@ -16,14 +15,13 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
 
-		const [input] = args;
+		let input = interaction.options.getString("input");
 
 		var player = client.manager.get(interaction.guildId);
 
@@ -44,13 +42,14 @@ module.exports = {
 				guild: interaction.guildId,
 				voiceChannel: voiceChannel.id,
 				textChannel: interaction.channelId,
-				volume: 100,
+				volume: 75,
 				selfDeafen: true
 			});
 		}
 
 		if (player.state !== "CONNECTED") player.connect();
 		player.set("autoplay", false);
+		player.filter = "off";
 
 		let res;
 
@@ -95,18 +94,9 @@ module.exports = {
 						embeds: [
 							new MessageEmbed()
 								.setColor(process.env.SIGHEX)
-								.setTitle(`**🎶  Added Track To Queue  🎶**`)
 								.setDescription(
-									`**[${track.title}](${track.uri})**`
+									`**Added [${track.title}](${track.uri}) to queue**`
 								)
-								.addFields({
-									name: "⌛  Duration  ⌛",
-									value: `**\`${pMs(track.duration, {
-										verbose: true
-									})}\`**`,
-									inline: true
-								})
-								.setThumbnail(track.thumbnail)
 						]
 					});
 				}
@@ -124,23 +114,9 @@ module.exports = {
 					embeds: [
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
-							.setTitle(`**🎶  Added Playlist To Queue  🎶**`)
-							.setDescription(`**${res.playlist.name}**`)
-							.addFields(
-								{
-									name: "⌛  Duration  ⌛",
-									value: `**\`${pMs(track.duration, {
-										verbose: true
-									})}\`**`,
-									inline: true
-								},
-								{
-									name: "Length",
-									value: `\`${res.tracks.length}\``,
-									inline: true
-								}
+							.setDescription(
+								`**Added ${res.playlist.name} to queue**`
 							)
-							.setThumbnail(track.thumbnail)
 					]
 				});
 				break;
@@ -154,18 +130,9 @@ module.exports = {
 						embeds: [
 							new MessageEmbed()
 								.setColor(process.env.SIGHEX)
-								.setTitle(`**🎶  Added Track To Queue  🎶**`)
 								.setDescription(
-									`**[${track.title}](${track.uri})**`
+									`**Added [${track.title}](${track.uri}) to queue**`
 								)
-								.addFields({
-									name: "⌛  Duration  ⌛",
-									value: `**\`${pMs(track.duration, {
-										verbose: true
-									})}\`**`,
-									inline: true
-								})
-								.setThumbnail(track.thumbnail)
 						]
 					});
 				}

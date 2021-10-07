@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.4",
     "chalk": "^4.1.2",
+    "delay": "^5.0.0",
     "discord-rpc": "^4.0.1",
     "discord.js": "^13.2.0-dev.1630973087.f57791c",
     "dotenv": "^10.0.0",
@@ -21,12 +23,12 @@
     "eslint": "^7.32.0",
     "fs": "^0.0.1-security",
     "glob": "^7.1.7",
-    "isgd": "^1.1.3",
-    "minecraft-server-util": "^1.0.2",
+    "lyrics-finder": "^21.7.0",
     "moment": "^2.29.1",
     "mongoose": "^6.0.5",
     "ms": "^2.1.3",
-    "pretty-ms": "^7.0.1"
+    "pretty-ms": "^7.0.1",
+    "yt-search": "^2.10.1"
   },
   "engines": {
     "node": "16.x"

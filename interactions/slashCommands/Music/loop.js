@@ -29,14 +29,13 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
-		const [mode] = args;
-
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
+
+		let mode = interaction.options.getString("mode");
 
 		const player = client.manager.players.get(interaction.guildId);
 

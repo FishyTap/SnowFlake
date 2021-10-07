@@ -17,14 +17,13 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
-		const [time] = args;
-
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
+
+		let time = interaction.options.getString("time");
 
 		const player = client.manager.players.get(interaction.guildId);
 
@@ -63,7 +62,14 @@ module.exports = {
 				]
 			});
 		} else {
-			const t = ms(time);
+			let arg = time.split(/[ ]+/);
+
+			let t = 0;
+
+			for (let i = 0; i < arg.length; i++) {
+				t += ms(arg[i]);
+			}
+
 			const position = player.position;
 			const duration = player.queue.current.duration;
 

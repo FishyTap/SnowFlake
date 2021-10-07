@@ -65,26 +65,27 @@ module.exports = {
 
 				let embed = new MessageEmbed()
 					.setColor(process.env.SIGHEX)
-					.setTitle("🎬  **Queue**  🎬").setDescription(`
-                        **Now Playing**
-                        **[${player.queue.current.title}](${
-					player.queue.current.uri
-				})**
-                        ---------------------------------------------------------------------------------
-                        ${tracks
-							.map(
-								(track, index) =>
-									`**${index + 1 + counter * 10}.** **[${
-										track.title
-									}](${track.uri})**`
-							)
-							.join("\n")}
-                    `);
+					.setTitle("🎬  **Queue**  🎬")
+					.setDescription(
+						[
+							`**Now Playing**`,
+							`**[${player.queue.current.title}](${player.queue.current.uri})**`,
+							`**---------------------------------------------------------------------------------**`,
+							`${tracks
+								.map(
+									(track, index) =>
+										`**${index + 1 + counter * 10}.** **[${
+											track.title
+										}](${track.uri})**`
+								)
+								.join("\n")}`
+						].join("\n")
+					);
 
 				counter++;
 				pages.push(embed);
 			}
-			Pagination(message, pages, null, 60000, [true, true]);
+			Pagination(message, pages, null, 60000, [true, true], false);
 		}
 	}
 };

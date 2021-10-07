@@ -8,35 +8,35 @@ module.exports = {
 	 *
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {Array} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
-			ephemeral: true
+			ephemeral: false
 		});
+
 		interaction
-			.followUp({
+			.editReply({
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setDescription(`**🏓 Pong! | Calculating ping...**`)
+						.setDescription(`**Calculating ping...**`)
 				]
 			})
 			.then(async (msg) => {
-				setTimeout(() => {
-					interaction.editReply({
-						embeds: [
-							new MessageEmbed()
-								.setColor(process.env.SIGHEX)
-								.setDescription(
-									`**🏓 Pong! | Latency: ${
-										msg.createdTimestamp -
-										interaction.createdTimestamp
-									}ms**`
-								)
-						]
-					});
-				}, 3000);
-			});
+				interaction.editReply({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setTitle("🏓 Pong!").setDescription(`
+								**Client Latency:  \`${
+									msg.createdTimestamp -
+									interaction.createdTimestamp
+								}ms\`**
+								**Api Latency:  \`${client.ws.ping}ms\`**
+							`)
+					]
+				});
+			})
+			.catch(() => {});
 	}
 };

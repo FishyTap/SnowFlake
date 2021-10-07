@@ -1,67 +1,68 @@
 console.clear();
 
-const Discord = require("discord.js");
+const { Client, Collection, Intents } = require("discord.js");
 const path = require("path");
 const chalk = require("chalk");
-const { Manager } = require("erela.js");
-const Deezer = require("erela.js-deezer");
-const Facebook = require("erela.js-facebook");
-const Spotify = require("erela.js-spotify");
-const fs = require("fs");
 require("dotenv").config();
-require("./mongo")();
+require("./mongo/mongo")();
 
 console.log(chalk.bold.white("[==========Building Project==========]"));
 
-const client = new Discord.Client({
-	intents: new Discord.Intents(32767),
+const client = new Client({
+	intents: new Intents(32767),
 	partials: ["CHANNEL", "MESSAGE", "REACTION"],
 	shards: "auto",
 	restTimeOffset: 0
 });
 
-client.commands = new Discord.Collection();
-client.interactions = new Discord.Collection();
+client.commands = new Collection();
+client.interactions = new Collection();
+client.afk = new Collection();
+client.snipes = new Collection();
 
 require(path.join(__dirname, "./loaders/loader"))(client);
 
 client.login(process.env.TOKEN);
 
 // Lavalink
-client.manager = new Manager({
-	nodes: [
-		{
-			host: "disbotlistlavalink.ml",
-			password: "LAVA",
-			port: 443,
-			retryDelay: 3000,
-			secure: true
-		}
-	],
-	plugins: [
-		new Deezer(),
-		new Facebook(),
-		new Spotify({
-			clientID: process.env.SPOTIFY_ID,
-			clientSecret: process.env.SPOTIFY_SECRET
-		})
-	],
-	send: (id, payload) => {
-		const guild = client.guilds.cache.get(id);
-		if (guild) guild.shard.send(payload);
-	}
-});
+(async () => {
+	const { Manager } = require("erela.js");
+	const Deezer = require("erela.js-deezer");
+	const Facebook = require("erela.js-facebook");
+	const Spotify = require("erela.js-spotify");
+	const fs = require("fs");
 
-fs.readdirSync(path.join(__dirname, "lavalink")).forEach((folder) => {
-	if (folder == "Lavalink.jar") return;
-	fs.readdirSync(path.join(__dirname, "lavalink", folder))
+	client.manager = new Manager({
+		nodes: [
+			{
+				host: "disbotlistlavalink.ml",
+				password: "LAVA",
+				port: 443,
+				retryDelay: 3000,
+				secure: true
+			}
+		],
+		plugins: [
+			new Deezer(),
+			new Facebook(),
+			new Spotify({
+				clientID: process.env.SPOTIFY_ID,
+				clientSecret: process.env.SPOTIFY_SECRET
+			})
+		],
+		send: (id, payload) => {
+			const guild = client.guilds.cache.get(id);
+			if (guild) guild.shard.send(payload);
+		}
+	});
+
+	fs.readdirSync(path.join(__dirname, "./events/lavalink"))
 		.filter((files) => files.endsWith(".js"))
 		.forEach((file) => {
 			try {
 				let events = require(path.join(
 					__dirname,
-					"lavalink",
-					folder,
+					"./events/lavalink",
 					file
 				));
 				let name = file.split(".")[0];
@@ -85,12 +86,12 @@ fs.readdirSync(path.join(__dirname, "lavalink")).forEach((folder) => {
 				);
 			}
 		});
-});
 
-client.on("ready", () => {
-	client.manager.init(client.user.id);
-});
+	client.on("ready", () => {
+		client.manager.init(client.user.id);
+	});
 
-client.on("raw", (i) => {
-	client.manager.updateVoiceState(i);
-});
+	client.on("raw", (i) => {
+		client.manager.updateVoiceState(i);
+	});
+})();

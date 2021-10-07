@@ -15,10 +15,9 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
-		const [index] = args;
+	callbacks: async (client, interaction) => {
+		let index = interaction.options.getNumber("index");
 
 		await interaction.deferReply({
 			ephemeral: false

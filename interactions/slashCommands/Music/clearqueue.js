@@ -7,9 +7,8 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});

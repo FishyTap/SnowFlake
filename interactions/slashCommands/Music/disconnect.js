@@ -7,9 +7,8 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
@@ -55,6 +54,14 @@ module.exports = {
 
 			player.queue.clear();
 			player.stop();
+
+			message.channel.send({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.SIGHEX)
+						.setDescription(`⏹  **Client has disconnected**`)
+				]
+			});
 		}
 	}
 };

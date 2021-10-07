@@ -17,14 +17,13 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
-		const [time] = args;
-
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
+
+		let time = interaction.options.getString("time");
 
 		const player = client.manager.players.get(interaction.guildId);
 
@@ -63,11 +62,18 @@ module.exports = {
 				]
 			});
 		} else {
-			const t = ms(time);
+			let args = time.split(/[ ]+/);
+
+			let t = 0;
+
+			for (let i = 0; i < args.length; i++) {
+				t += ms(args[i]);
+			}
+
 			const position = player.position;
 			const duration = player.queue.current.duration;
 
-			if (t <= duration) {
+			if (t < duration - position) {
 				player.seek(position + t);
 
 				interaction.editReply({
@@ -88,7 +94,7 @@ module.exports = {
 						new MessageEmbed()
 							.setColor(process.env.REDHEX)
 							.setDescription(
-								"**Rewind time exceeds the track duration**"
+								"**Forward time exceeds the track duration**"
 							)
 					]
 				});

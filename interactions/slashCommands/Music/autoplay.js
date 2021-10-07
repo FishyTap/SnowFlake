@@ -8,9 +8,8 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
@@ -81,7 +80,7 @@ module.exports = {
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
 							.setDescription(
-								`**🔄 Autoplay is now \`enabled\`**`
+								`**↪️ Autoplay is now \`enabled\`**`
 							)
 					]
 				});
@@ -94,7 +93,7 @@ module.exports = {
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
 							.setDescription(
-								`**🔄 Autoplay is now \`disabled\`**`
+								`**↪️ Autoplay is now \`disabled\`**`
 							)
 					]
 				});

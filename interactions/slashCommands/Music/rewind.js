@@ -17,10 +17,9 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
-		const [time] = args;
+	callbacks: async (client, interaction) => {
+		let time = interaction.options.getString("time");
 
 		await interaction.deferReply({
 			ephemeral: false
@@ -63,11 +62,17 @@ module.exports = {
 				]
 			});
 		} else {
-			const t = ms(time);
-			const position = player.position;
-			const duration = player.queue.current.duration;
+			let args = time.split(/[ ]+/);
 
-			if (t <= duration) {
+			let t = 0;
+
+			for (let i = 0; i < args.length; i++) {
+				t += ms(args[i]);
+			}
+
+			const position = player.position;
+
+			if (t <= position) {
 				player.seek(position - t);
 
 				interaction.editReply({

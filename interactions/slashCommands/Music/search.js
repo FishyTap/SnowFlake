@@ -16,14 +16,13 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
 
-		const [input] = args;
+		let input = interaction.options.getString("input");
 
 		var player = client.manager.get(interaction.guildId);
 
@@ -101,19 +100,22 @@ module.exports = {
 						.setDescription(track.substr(0, 2048))
 				]
 			});
-			await interaction.channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setColor(process.env.SIGHEX)
-                        .setDescription(
-                            "**Please state the index of the track you want to play**"
-                        )
-                        .setFooter("Respond with 'cancel' to discontinue")
-                ]
-			}).then(async (msg) => {
+			await interaction.channel
+				.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								"**Please state the index of the track you want to play**"
+							)
+							.setFooter("Respond with 'cancel' to discontinue")
+					]
+				})
+				.then(async (msg) => {
 					let filter = (i) => i.author.id === interaction.user.id;
 
-					await msg.channel.awaitMessages({
+					await msg.channel
+						.awaitMessages({
 							filter,
 							max: 1,
 							time: 30 * 1000

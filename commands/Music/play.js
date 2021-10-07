@@ -42,7 +42,7 @@ module.exports = {
 				guild: message.guild.id,
 				voiceChannel: message.member.voice.channel.id,
 				textChannel: message.channel.id,
-				volume: 100,
+				volume: 75,
 				selfDeafen: true
 			});
 		}
@@ -59,6 +59,7 @@ module.exports = {
 
 		if (player.state !== "CONNECTED") player.connect();
 		player.set("autoplay", false);
+		player.filter = "off";
 
 		const search = args.join(" ");
 		let res;
@@ -104,18 +105,9 @@ module.exports = {
 						embeds: [
 							new MessageEmbed()
 								.setColor(process.env.SIGHEX)
-								.setTitle(`**🎶  Added Track To Queue  🎶**`)
 								.setDescription(
-									`**[${track.title}](${track.uri})**`
+									`**Added [${track.title}](${track.uri}) to queue**`
 								)
-								.addFields({
-									name: "⌛  Duration  ⌛",
-									value: `**\`${pMs(track.duration, {
-										verbose: true
-									})}\`**`,
-									inline: true
-								})
-								.setThumbnail(track.thumbnail)
 						]
 					});
 				}
@@ -133,23 +125,9 @@ module.exports = {
 					embeds: [
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
-							.setTitle(`**🎶  Added Playlist To Queue  🎶**`)
-							.setDescription(`**${res.playlist.name}**`)
-							.addFields(
-								{
-									name: "⌛  Duration  ⌛",
-									value: `**\`${pMs(track.duration, {
-										verbose: true
-									})}\`**`,
-									inline: true
-								},
-								{
-									name: "Length",
-									value: `\`${res.tracks.length}\``,
-									inline: true
-								}
+							.setDescription(
+								`**Added ${res.playlist.name} to queue**`
 							)
-							.setThumbnail(track.thumbnail)
 					]
 				});
 				break;
@@ -163,18 +141,9 @@ module.exports = {
 						embeds: [
 							new MessageEmbed()
 								.setColor(process.env.SIGHEX)
-								.setTitle(`**🎶  Added Track To Queue  🎶**`)
 								.setDescription(
-									`**[${track.title}](${track.uri})**`
+									`**Added [${track.title}](${track.uri}) to queue**`
 								)
-								.addFields({
-									name: "⌛  Duration  ⌛",
-									value: `**\`${pMs(track.duration, {
-										verbose: true
-									})}\`**`,
-									inline: true
-								})
-								.setThumbnail(track.thumbnail)
 						]
 					});
 				}

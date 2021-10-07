@@ -8,9 +8,8 @@ module.exports = {
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
@@ -70,33 +69,27 @@ module.exports = {
 
 				let embed = new MessageEmbed()
 					.setColor(process.env.SIGHEX)
-					.setTitle("🎬  **Queue**  🎬").setDescription(`
-                        **Now Playing**
-                        **[${player.queue.current.title}](${
-					player.queue.current.uri
-				})**
-                        ---------------------------------------------------------------------------------
-                        ${tracks
-							.map(
-								(track, index) =>
-									`**${index + 1 + counter * 10}.** **[${
-										track.title
-									}](${track.uri})**`
-							)
-							.join("\n")}
-                    `);
+					.setTitle("🎬  **Queue**  🎬")
+					.setDescription(
+						[
+							`**Now Playing**`,
+							`**[${player.queue.current.title}](${player.queue.current.uri})**`,
+							`**---------------------------------------------------------------------------------**`,
+							`${tracks
+								.map(
+									(track, index) =>
+										`**${index + 1 + counter * 10}.** **[${
+											track.title
+										}](${track.uri})**`
+								)
+								.join("\n")}`
+						].join("\n")
+					);
 
 				counter++;
 				pages.push(embed);
 			}
-			Pagination(
-				interaction,
-				pages,
-				null,
-				60000,
-				[true, true],
-				"interaction"
-			);
+			Pagination(interaction, pages, null, 60000, [true, true], true);
 		}
 	}
 };

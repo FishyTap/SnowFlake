@@ -53,6 +53,14 @@ module.exports = {
 
 			player.queue.clear();
 			player.stop();
+
+			message.channel.send({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.SIGHEX)
+						.setDescription(`⏹  **Client has disconnected**`)
+				]
+			});
 		}
 	}
 };

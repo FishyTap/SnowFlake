@@ -2,17 +2,26 @@ const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 
 module.exports = {
 	name: "volume",
-	description: "Shows the current volume",
+	description: "Configures the volume of the player",
 	type: "CHAT_INPUT",
+	options: [
+		{
+			name: "volume",
+			description: "volume that you want to set to",
+			type: "NUMBER",
+			required: false
+		}
+	],
 	/**
 	 * @param {Client} client
 	 * @param {CommandInteraction} interaction
-	 * @param {String[]} args
 	 */
-	callbacks: async (client, interaction, args) => {
+	callbacks: async (client, interaction) => {
 		await interaction.deferReply({
 			ephemeral: false
 		});
+
+		let v = interaction.options.getNumber("volume");
 
 		const player = client.manager.players.get(interaction.guildId);
 
@@ -57,7 +66,7 @@ module.exports = {
 						)
 				]
 			});
-		} else {
+		} else if (!v) {
 			interaction.editReply({
 				embeds: [
 					new MessageEmbed()
@@ -67,6 +76,58 @@ module.exports = {
 						)
 				]
 			});
+		} else {
+			if (v > 200) {
+				return interaction.editReply({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription(`**The given volume is too loud**`)
+					]
+				});
+			} else if (v < 0) {
+				return interaction.editReply({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription(`**The given volume is too low**`)
+					]
+				});
+			}
+
+			player.setVolume(v);
+
+			if (v > player.volume) {
+				interaction.editReply({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								`🔊 **Volume is now set to: \`${v}%\`**`
+							)
+					]
+				});
+			} else if (v < player.volume) {
+				interaction.editReply({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								`🔈 **Volume is now set to: \`${v}%\`**`
+							)
+					]
+				});
+			} else {
+				interaction.editReply({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								`🔉 **Volume is now set to: \`${v}%\`**`
+							)
+					]
+				});
+			}
 		}
 	}
 };

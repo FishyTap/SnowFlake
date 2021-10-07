@@ -5,7 +5,7 @@ module.exports = {
 	aliases: [],
 	cooldown: 10,
 	permissions: [],
-	usage: "<none>",
+	usage: "",
 	description: "Shows the current Ping Latency of the bot",
 	/**
 	 *
@@ -19,27 +19,21 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setDescription(`**🏓 Pong! | Calculating ping...**`)
+						.setDescription(`**Calculating ping...**`)
 				]
 			})
 			.then(async (msg) => {
-				setTimeout(() => {
-					msg.edit({
-						embeds: [
-							new MessageEmbed()
-								.setColor(process.env.SIGHEX)
-								.setDescription(
-									`**🏓 Pong! | Latency: ${
-										msg.createdTimestamp -
-										message.createdTimestamp
-									}ms**`
-								)
-						]
-					});
-				}, 3000);
+				msg.edit({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setTitle("🏓 Pong!").setDescription(`
+								**Client Latency:  \`${msg.createdTimestamp - message.createdTimestamp}ms\`**
+								**Api Latency:  \`${client.ws.ping}ms\`**
+							`)
+					]
+				});
 			})
-			.catch(() => {
-				return;
-			});
+			.catch(() => {});
 	}
 };

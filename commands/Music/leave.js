@@ -59,7 +59,9 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setDescription(`**Client has left the voice channel**`)
+						.setDescription(
+							`⏹  **Client has left the voice channel**`
+						)
 				]
 			});
 		}

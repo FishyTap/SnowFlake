@@ -5,8 +5,8 @@ module.exports = {
 	aliases: [],
 	cooldown: 0,
 	permissions: [],
-	usage: "<none>",
-	description: "Shows the current volume",
+	usage: "<optional: volume>",
+	description: "Configures the volume of the player",
 	/**
 	 * @param {Client} client
 	 * @param {Message} message
@@ -54,7 +54,7 @@ module.exports = {
 						)
 				]
 			});
-		} else {
+		} else if (!args[0]) {
 			message.channel.send({
 				embeds: [
 					new MessageEmbed()
@@ -64,6 +64,68 @@ module.exports = {
 						)
 				]
 			});
+		} else if (isNaN(args[0])) {
+			return message.channel.send({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.REDHEX)
+						.setDescription(`**Invalid volume**`)
+				]
+			});
+		} else {
+			let volume = Number(args[0]);
+
+			if (volume > 200) {
+				return message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription(`**The given volume is too loud**`)
+					]
+				});
+			} else if (volume < 0) {
+				return message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription(`**The given volume is too low**`)
+					]
+				});
+			}
+
+			player.setVolume(volume);
+
+			if (volume > player.volume) {
+				message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								`🔊 **Volume is now set to: \`${volume}%\`**`
+							)
+					]
+				});
+			} else if (volume < player.volume) {
+				message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								`🔈 **Volume is now set to: \`${volume}%\`**`
+							)
+					]
+				});
+			} else {
+				message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setDescription(
+								`🔉 **Volume is now set to: \`${volume}%\`**`
+							)
+					]
+				});
+			}
 		}
 	}
 };

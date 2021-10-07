@@ -57,7 +57,12 @@ module.exports = {
 				]
 			});
 		} else {
-			const time = ms(args[0]);
+			let time = 0;
+
+			for (let i = 0; i < args.length; i++) {
+				time += ms(args[i]);
+			}
+
 			const position = player.position;
 			const duration = player.queue.current.duration;
 
