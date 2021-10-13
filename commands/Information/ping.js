@@ -14,6 +14,8 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	callbacks: async (client, message, args) => {
+		let time = Date.now();
+
 		message.channel
 			.send({
 				embeds: [
@@ -27,10 +29,22 @@ module.exports = {
 					embeds: [
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
-							.setTitle("🏓 Pong!").setDescription(`
-								**Client Latency:  \`${msg.createdTimestamp - message.createdTimestamp}ms\`**
-								**Api Latency:  \`${client.ws.ping}ms\`**
-							`)
+							.setAuthor(
+								"🏓 Pong!",
+								client.user.displayAvatarURL({ dynamic: true })
+							)
+							.addField(
+								"**Client Latency**",
+								`**\`\`\`ini\n   [ ${
+									Date.now() - time
+								}ms ]   \`\`\`**`,
+								true
+							)
+							.addField(
+								"**API Latency**",
+								`**\`\`\`ini\n   [ ${client.ws.ping}ms ]   \`\`\`**`,
+								true
+							)
 					]
 				});
 			})

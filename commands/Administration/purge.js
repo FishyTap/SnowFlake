@@ -38,7 +38,15 @@ module.exports = {
 
 		const amount = args[0];
 
-		await message.channel.bulkDelete(1, true);
+		if (amount > 100) {
+			return message.channel.send({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.REDHEX)
+						.setDescription("**Invalid Amount**")
+				]
+			});
+		}
 
 		let msg = message.channel.messages.fetch({ limit: amount });
 

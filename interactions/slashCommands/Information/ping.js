@@ -4,6 +4,7 @@ module.exports = {
 	name: "ping",
 	description: "🏓 Pong!",
 	type: "CHAT_INPUT",
+	cooldown: 10,
 	/**
 	 *
 	 * @param {Client} client
@@ -14,6 +15,8 @@ module.exports = {
 			ephemeral: false
 		});
 
+		let time = Date.now();
+
 		interaction
 			.editReply({
 				embeds: [
@@ -22,18 +25,27 @@ module.exports = {
 						.setDescription(`**Calculating ping...**`)
 				]
 			})
-			.then(async (msg) => {
+			.then(async () => {
 				interaction.editReply({
 					embeds: [
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
-							.setTitle("🏓 Pong!").setDescription(`
-								**Client Latency:  \`${
-									msg.createdTimestamp -
-									interaction.createdTimestamp
-								}ms\`**
-								**Api Latency:  \`${client.ws.ping}ms\`**
-							`)
+							.setAuthor(
+								"🏓 Pong!",
+								client.user.displayAvatarURL({ dynamic: true })
+							)
+							.addField(
+								"**Client Latency**",
+								`**\`\`\`ini\n   [ ${
+									Date.now() - time
+								}ms ]   \`\`\`**`,
+								true
+							)
+							.addField(
+								"**API Latency**",
+								`**\`\`\`ini\n   [ ${client.ws.ping}ms ]   \`\`\`**`,
+								true
+							)
 					]
 				});
 			})

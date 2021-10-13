@@ -3,6 +3,7 @@ const chalk = require("chalk");
 const { glob } = require("glob");
 const { promisify } = require("util");
 const globPromise = promisify(glob);
+const cooldown = new Map();
 
 /**
  *
@@ -30,8 +31,9 @@ module.exports = async (client) => {
 
 			client.interactions.set(file.name, file);
 
-			if (["MESSAGE", "USER"].includes(file.type))
+			if (["MESSAGE", "USER"].includes(file.type)) {
 				delete file.description;
+			}
 
 			if (file.permissions) file.defaultPermission = false;
 

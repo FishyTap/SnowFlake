@@ -1,5 +1,10 @@
 module.exports = {
-	capitalizeFirstLetter: function (string) {
+	/**
+	 *
+	 * @param {String} string
+	 * @returns
+	 */
+	capitalizeFirstLetter: async (string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 };

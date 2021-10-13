@@ -62,12 +62,20 @@ module.exports = async (client, message) => {
 		const expiration_time =
 			time_stamps.get(message.author.id) + cooldown_amount;
 		if (current_time < expiration_time) {
+			message.delete();
+
 			const time_left = (expiration_time - current_time) / 1000;
 			return message.channel
 				.send({
-					content: `Please wait **\`${time_left.toFixed(
-						1
-					)} seconds\`** between each cooldown`
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription(
+								`**Please wait \`${time_left.toFixed(
+									1
+								)} seconds\` between each cooldown**`
+							)
+					]
 				})
 				.then((msg) => setTimeout(() => msg.delete(), 1000 * 5));
 		}
@@ -126,6 +134,7 @@ module.exports = async (client, message) => {
 			}
 
 			if (!message.member.permissions.has(permission)) {
+				message.delete();
 				invalidPermissionsFlags.push(permission);
 			}
 		}

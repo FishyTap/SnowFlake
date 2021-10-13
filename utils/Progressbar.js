@@ -1,5 +1,18 @@
+const { Emoji } = require("discord.js");
+
+const k = Emoji || String;
+
 module.exports = {
-	progressbar: function (total, current, size, line, slider) {
+	/**
+	 *
+	 * @param {String} total
+	 * @param {String} current
+	 * @param {String} size
+	 * @param {k} line
+	 * @param {k} slider
+	 * @returns
+	 */
+	progressbar: (total, current, size, line, slider) => {
 		if (current > total) {
 			const bar = line.repeat(size + 2);
 			return bar;

@@ -27,7 +27,15 @@ module.exports = {
 		try {
 			let amount = interaction.options.getNumber("amount");
 
-			await interaction.channel.bulkDelete(1, true);
+			if (amount > 100) {
+				interaction.followUp({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription("**Invalid Amount**")
+					]
+				});
+			}
 
 			let msg = interaction.channel.messages.fetch({ limit: amount });
 

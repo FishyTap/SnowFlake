@@ -20,7 +20,7 @@ module.exports = (client) => {
 	});
 
 	client.user.setActivity({
-		name: `${process.env.PREFIX}help`,
+		name: `/help`,
 		type: "LISTENING"
 	});
 };

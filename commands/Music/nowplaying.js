@@ -2,6 +2,7 @@ const { Client, Message, MessageEmbed } = require("discord.js");
 const yts = require("yt-search");
 const { progressbar } = require("../../utils/Progressbar");
 const pMs = require("pretty-ms");
+const ytsr = require("youtube-sr").default;
 
 module.exports = {
 	name: "nowplaying",
@@ -78,11 +79,26 @@ module.exports = {
 				""
 			);
 
+			let ytData = await ytsr.getVideo(trackUrl);
+
 			let video = await yts({ videoId: trackId });
 
 			let size = 25;
 			let line = "▬";
 			let slider = "🔘";
+
+			let emoji = {
+				like: client.emojis.cache.get("895890322943520788"),
+				dislike: client.emojis.cache.get("895890358326685696"),
+				muzik: client.emojis.cache.get("895892264256151572"),
+				equalizer: client.emojis.cache.get("895897607128371280"),
+				247: client.emojis.cache.get("895901356051808266"),
+				loop: client.emojis.cache.get("895902356724678708"),
+				autoplay: client.emojis.cache.get("895905227746705480"),
+				calender: client.emojis.cache.get("895908482371424286"),
+				sound: client.emojis.cache.get("895908507080065045"),
+				views: client.emojis.cache.get("895908524805226516")
+			};
 
 			let loop;
 
@@ -99,18 +115,18 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setTitle("🎵  **Now Playing**  🎵")
+						.setAuthor( "Now Playing", emoji.muzik.url)
 						.setDescription(`**[${track.title}](${track.uri})**`)
-						.setThumbnail(track.thumbnail)
-						.addField("🔊  Volume", `**\`${player.volume}%\`**`, true)
-						.addField("🧭  Equalizer", `**\`${player.filter}\`**`, true)
-						.addField("🔁  Loop", `**\`${loop}\`**`, true)
-						.addField("↪️  Autoplay", `**\`${aP}\`**`, true)
-						.addField("🍀  24/7", `**\`${mode247}\`**`, true)
-						.addField("\u200b", "\u200b", true)
-						.addField("👥  Views",`**\`${video.views.toLocaleString()}\`**`,true)
-						.addField("📅  Uploaded",`**\`${video.ago}\`**`,true)
-						.addField("\u200b", "\u200b", true)
+						.setThumbnail(ytData.thumbnail.url)
+						.addField(`${emoji.sound}  Volume`, `**\`${player.volume}%\`**`, true)
+						.addField(`${emoji.equalizer}  Equalizer`, `**\`${player.filter}\`**`, true)
+						.addField(`${emoji[247]}  24/7`, `**\`${mode247}\`**`, true)
+						.addField(`↪${emoji.autoplay}  Autoplay`, `**\`${aP}\`**`, true)
+						.addField(`${emoji.loop}  Loop`, `**\`${loop}\`**`, true)
+						.addField(`${emoji.views}  Views`,`**\`${video?.views?.toLocaleString()}\`**`,true)
+						.addField(`${emoji.like}  Likes`, `**\`${ytData.likes ? ytData?.likes.toLocaleString() : "None"}\`**`, true)
+						.addField(`${emoji.dislike}  Dislikes`, `**\`${ytData.dislikes ? ytData?.dislikes.toLocaleString() : "None"}\`**`, true)
+						.addField(`${emoji.calender}  Uploaded`,`**\`${video.ago}\`**`,true)
 						.addField(
 							`**|**${progressbar(duration, position, size, line, slider)}**|**`,
 							`**Duration:  \`${pMs(position, {verbose: true})} / ${pMs(duration, { verbose: true })}\`**`
