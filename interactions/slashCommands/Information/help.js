@@ -52,6 +52,7 @@ module.exports = {
 			fs.readdirSync(
 				path.join(__dirname, "..", "..", "..", "commands")
 			).forEach((dir) => {
+				if (dir == "Owner") return;
 				let data = new Object();
 
 				data = {
@@ -103,6 +104,8 @@ module.exports = {
 			fs.readdirSync(
 				path.join(__dirname, "..", "..", "..", "commands")
 			).forEach((dir) => {
+				if (dir == "Owner") return;
+
 				dirs.push(`${dir.toLowerCase()}`);
 
 				const cmd = fs
@@ -187,7 +190,7 @@ module.exports = {
 						embeds: [
 							new MessageEmbed()
 								.setColor(process.env.SIGHEX)
-								.setDescription(`**Unknown Command**`)
+								.setDescription(`**Unknown Query**`)
 						]
 					});
 				}
