@@ -27,6 +27,7 @@ module.exports = {
 
 		categoryEmojis = {
 			ADMINISTRATION: "🔒",
+			DEVELOPER: "🌐",
 			FUN: "🎮",
 			INFORMATION: "🔎",
 			MUSIC: "🎧",
@@ -39,7 +40,11 @@ module.exports = {
 			fs.readdirSync(
 				path.join(__dirname, "..", "..", "commands")
 			).forEach((dir) => {
-				if (dir == "Owner") return;
+				if (
+					dir == "Developer" &&
+					message.author.id !== "835037519786803251"
+				)
+					return;
 				let data = new Object();
 
 				data = {
@@ -91,7 +96,11 @@ module.exports = {
 			fs.readdirSync(
 				path.join(__dirname, "..", "..", "commands")
 			).forEach((dir) => {
-				if (dir == "Owner") return;
+				if (
+					dir == "Developer" &&
+					message.author.id !== "835037519786803251"
+				)
+					return;
 				dirs.push(`${dir.toLowerCase()}`);
 
 				const cmd = fs
@@ -122,6 +131,8 @@ module.exports = {
 				desc = {
 					ADMINISTRATION:
 						"These are the Administration commands. Only the staffs can use these commands regarding their permissions!",
+					DEVELOPER:
+						"These are the Developer commands. Only the developers can use these commands!",
 					FUN: "These are the Fun commands. You can play games and have fun with your friends!",
 					INFORMATION:
 						"These are the Information commands. You can use these commands to get information that you are looking for!",
