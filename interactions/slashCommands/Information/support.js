@@ -97,7 +97,9 @@ module.exports = {
 
 				setTimeout(async () => {
 					await inter.editReply({
-						components: [...button(null, "🏷", true)]
+						components: [
+							...button("https://www.is.gd/SnowFlake", "🏷", true)
+						]
 					});
 				}, time);
 			} else if (value == "community") {
@@ -117,7 +119,13 @@ module.exports = {
 
 				setTimeout(async () => {
 					await inter.editReply({
-						components: [...button(null, "🎯", true)]
+						components: [
+							...button(
+								"https://discord.gg/2zezEnMpaZ",
+								"🎯",
+								true
+							)
+						]
 					});
 				}, time);
 			}
