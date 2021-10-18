@@ -121,7 +121,7 @@ module.exports = {
 						.addField(`${emoji.sound}  Volume`, `**\`${player.volume}%\`**`, true)
 						.addField(`${emoji.equalizer}  Equalizer`, `**\`${player.filter}\`**`, true)
 						.addField(`${emoji[247]}  24/7`, `**\`${mode247}\`**`, true)
-						.addField(`↪${emoji.autoplay}  Autoplay`, `**\`${aP}\`**`, true)
+						.addField(`${emoji.autoplay}  Autoplay`, `**\`${aP}\`**`, true)
 						.addField(`${emoji.loop}  Loop`, `**\`${loop}\`**`, true)
 						.addField(`${emoji.views}  Views`,`**\`${video?.views?.toLocaleString()}\`**`,true)
 						.addField(`${emoji.like}  Likes`, `**\`${ytData.likes ? ytData?.likes.toLocaleString() : "None"}\`**`, true)
