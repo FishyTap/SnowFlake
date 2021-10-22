@@ -54,7 +54,7 @@ module.exports = async (client) => {
 		"882582756482252840", // Test
 		"728751693503922190" // Dev
 	];
-	let test = true;
+	let test = false;
 
 	client.on("ready", async () => {
 		if (test === true) {
