@@ -101,48 +101,46 @@ module.exports = async (client) => {
 				});
 			});
 		} else if (test !== true) {
-			await client.application.commands
-				.set(cmdArray)
-				.then(async (cmd) => {
-					client.guilds.cache.forEach((guild) => {
-						const getRoles = (commandNames) => {
-							const perms = cmdArray.find(
-								(x) => x.name === commandNames
-							).permissions;
+			client.guilds.cache.forEach(async (guild) => {
+				await guild.commands.set(cmdArray).then(async (cmd) => {
+					const getRoles = (commandNames) => {
+						const perms = cmdArray.find(
+							(x) => x.name === commandNames
+						).permissions;
 
-							if (!perms) return null;
-							return guild.roles.cache.filter(
-								(x) => x.permissions.has(perms) && !x.managed
-							);
-						};
+						if (!perms) return null;
+						return guild.roles.cache.filter(
+							(x) => x.permissions.has(perms) && !x.managed
+						);
+					};
 
-						const fullPermissions = cmd.reduce((accumulater, x) => {
-							const roles = getRoles(x.name);
-							if (!roles) return accumulater;
+					const fullPermissions = cmd.reduce((accumulater, x) => {
+						const roles = getRoles(x.name);
+						if (!roles) return accumulater;
 
-							const permissions = roles.reduce((a, v) => {
-								return [
-									...a,
-									{
-										id: v.id,
-										type: "ROLE",
-										permission: true
-									}
-								];
-							}, []);
-
+						const permissions = roles.reduce((a, v) => {
 							return [
-								...accumulater,
+								...a,
 								{
-									id: x.id,
-									permissions
+									id: v.id,
+									type: "ROLE",
+									permission: true
 								}
 							];
 						}, []);
 
-						guild.commands.permissions.set({ fullPermissions });
-					});
+						return [
+							...accumulater,
+							{
+								id: x.id,
+								permissions
+							}
+						];
+					}, []);
+
+					guild.commands.permissions.set({ fullPermissions });
 				});
+			});
 		}
 	});
 };
