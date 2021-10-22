@@ -15,6 +15,13 @@ const client = new Client({
 	restTimeOffset: 0
 });
 
+client.owner = {
+	username: "FishyTap Dev™",
+	tag: "FishyTap Dev™#8755",
+	discriminator: "8755",
+	id: "835037519786803251"
+};
+
 client.commands = new Collection();
 client.interactions = new Collection();
 client.afk = new Collection();
