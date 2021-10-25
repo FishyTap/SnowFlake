@@ -1,4 +1,4 @@
-const schema = require("../schemas/guilds");
+const schema = require("../../schemas/guilds");
 
 module.exports = {
 	customPrefix: async (message) => {
@@ -9,7 +9,7 @@ module.exports = {
 			.catch(() => {});
 
 		if (data) {
-			custom = data.prefix;
+			custom = data.config.prefix;
 		} else {
 			custom = process.env.PREFIX;
 		}

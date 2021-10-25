@@ -87,18 +87,26 @@ module.exports = {
 							.setColor(process.env.SIGHEX)
 							.setTitle("🏷 Invite")
 							.setDescription(
-								"**> Press the button below or click [here](https://www.is.gd/SnowFlake) to invite me to another server**"
+								`**> Press the button below or click [here](https://discord.com/api/oauth2/authorize?client_id=${client.application.id}&permissions=8&scope=bot%20applications.commands) to invite me to another server**`
 							)
 					],
 					components: [
-						...button("https://www.is.gd/SnowFlake", "🏷", false)
+						...button(
+							`https://discord.com/api/oauth2/authorize?client_id=${client.application.id}&permissions=8&scope=bot%20applications.commands`,
+							"🏷",
+							false
+						)
 					]
 				});
 
 				setTimeout(async () => {
 					await inter.editReply({
 						components: [
-							...button("https://www.is.gd/SnowFlake", "🏷", true)
+							...button(
+								`https://discord.com/api/oauth2/authorize?client_id=${client.application.id}&permissions=8&scope=bot%20applications.commands`,
+								"🏷",
+								true
+							)
 						]
 					});
 				}, time);

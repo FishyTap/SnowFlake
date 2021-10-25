@@ -20,7 +20,11 @@
 
 ## 🏷Features
 
+- [x] Administration
+- [x] Fun
+- [x] Information
 - [x] Music
+- [x] Utilities
 
 
 ## 🎶 Available music sources:

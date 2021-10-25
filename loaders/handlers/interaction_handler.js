@@ -54,14 +54,14 @@ module.exports = async (client) => {
 		"882582756482252840", // Test
 		"728751693503922190" // Dev
 	];
-	let test = false;
+	let { test } = require("../../index");
 
 	client.on("ready", async () => {
-		if (test === true) {
+		if (test == true) {
 			servers.forEach(async (guilds) => {
 				let guild = client.guilds.cache.get(guilds);
 
-				await guild.commands.set(cmdArray).then(async (cmd) => {
+				await guild?.commands.set(cmdArray).then(async (cmd) => {
 					const getRoles = (commandNames) => {
 						const perms = cmdArray.find(
 							(x) => x.name === commandNames
@@ -97,10 +97,10 @@ module.exports = async (client) => {
 						];
 					}, []);
 
-					guild.commands.permissions.set({ fullPermissions });
+					guild?.commands.permissions.set({ fullPermissions });
 				});
 			});
-		} else if (test !== true) {
+		} else if (test == false) {
 			client.guilds.cache.forEach(async (guild) => {
 				await guild.commands.set(cmdArray).then(async (cmd) => {
 					const getRoles = (commandNames) => {

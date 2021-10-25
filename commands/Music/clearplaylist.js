@@ -27,7 +27,7 @@ module.exports = {
 				]
 			});
 		} else if (data) {
-			data.playlist.splice(0, data.playlist.length);
+			data.music.playlist.splice(0, data.music.playlist.length);
 			data.save();
 
 			message.channel.send({

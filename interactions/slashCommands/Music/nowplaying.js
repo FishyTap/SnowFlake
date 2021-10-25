@@ -79,14 +79,19 @@ module.exports = {
 
 			let trackUrl = track.uri;
 
-			let trackId = trackUrl.replace(
-				"https://www.youtube.com/watch?v=",
-				""
-			);
+			let ytData;
+			let video;
 
-			let ytData = await ytsr.getVideo(trackUrl);
+			if (!trackUrl.includes("https://www.twitch.tv" || "https://www.facebook.com")) {
+				let trackId = trackUrl.replace(
+					"https://www.youtube.com/watch?v=",
+					""
+				);
 
-			let video = await yts({ videoId: trackId });
+				ytData = await ytsr.getVideo(trackUrl);
+
+				video = await yts({ videoId: trackId });
+			}
 
 			let size = 25;
 			let line = "▬";
@@ -121,18 +126,18 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setAuthor( "Now Playing", emoji.muzik.url)
+						.setAuthor( "Now Playing", emoji.muzik?.url)
 						.setDescription(`**[${track.title}](${track.uri})**`)
-						.setThumbnail(ytData.thumbnail.url)
+						.setThumbnail(ytData ? ytData.thumbnail.url : null)
 						.addField(`${emoji.sound}  Volume`, `**\`${player.volume}%\`**`, true)
 						.addField(`${emoji.equalizer}  Equalizer`, `**\`${player.filter}\`**`, true)
 						.addField(`${emoji[247]}  24/7`, `**\`${mode247}\`**`, true)
 						.addField(`${emoji.autoplay}  Autoplay`, `**\`${aP}\`**`, true)
 						.addField(`${emoji.loop}  Loop`, `**\`${loop}\`**`, true)
-						.addField(`${emoji.views}  Views`,`**\`${video?.views?.toLocaleString()}\`**`,true)
-						.addField(`${emoji.like}  Likes`, `**\`${ytData.likes ? ytData?.likes.toLocaleString() : "None"}\`**`, true)
-						.addField(`${emoji.dislike}  Dislikes`, `**\`${ytData.dislikes ? ytData?.dislikes.toLocaleString() : "None"}\`**`, true)
-						.addField(`${emoji.calender}  Uploaded`,`**\`${video.ago}\`**`,true)
+						.addField(`${emoji.views}  Views`,`**\`${video?.views ? video?.views?.toLocaleString() : "None"}\`**`,true)
+						.addField(`${emoji.like}  Likes`, `**\`${ytData?.likes ? ytData?.likes.toLocaleString() : "None"}\`**`, true)
+						.addField(`${emoji.dislike}  Dislikes`, `**\`${ytData?.dislikes ? ytData?.dislikes.toLocaleString() : "None"}\`**`, true)
+						.addField(`${emoji.calender}  Uploaded`,`**\`${video?.ago ? video?.ago : "None"}\`**`,true)
 						.addField(
 							`**|**${progressbar(duration, position, size, line, slider)}**|**`,
 							`**Duration:  \`${pMs(position, {verbose: true})} / ${pMs(duration, { verbose: true })}\`**`

@@ -51,7 +51,7 @@ module.exports = {
 							)
 					]
 				});
-			} else if (index > data.playlist.length) {
+			} else if (index > data.music.playlist.length) {
 				return message.channel.send({
 					embeds: [
 						new MessageEmbed()
@@ -63,7 +63,7 @@ module.exports = {
 				});
 			}
 
-			data.playlist.splice(index - 1, 1);
+			data.music.playlist.splice(index - 1, 1);
 			data.save();
 
 			message.channel.send({

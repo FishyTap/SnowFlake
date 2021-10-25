@@ -5,9 +5,11 @@ const schema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	prefix: {
-		type: String,
-		required: true
+	config: {
+		prefix: {
+			type: String,
+			required: true
+		}
 	}
 });
 

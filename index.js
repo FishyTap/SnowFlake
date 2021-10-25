@@ -29,7 +29,9 @@ client.snipes = new Collection();
 
 require(path.join(__dirname, "./loaders/loader"))(client);
 
-client.login(process.env.TOKEN);
+const test = false;
+
+client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
 // Lavalink
 (async () => {
@@ -102,3 +104,5 @@ client.login(process.env.TOKEN);
 		client.manager.updateVoiceState(i);
 	});
 })();
+
+module.export = { test };

@@ -18,10 +18,12 @@ module.exports = {
 		if (!data) {
 			data = new schema({
 				userId: message.author.id,
-				playlist: [String]
+				music: {
+					playlist: [String]
+				}
 			});
 
-			data.playlist.splice(0, 1);
+			data.music.playlist.splice(0, 1);
 
 			data.save();
 

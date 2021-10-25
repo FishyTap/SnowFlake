@@ -136,6 +136,16 @@ module.exports = {
 			type: "SUB_COMMAND"
 		},
 		{
+			name: "list",
+			description: "Displays the playlist",
+			type: "SUB_COMMAND"
+		},
+		{
+			name: "delete",
+			description: "Deletes your playlist",
+			type: "SUB_COMMAND"
+		},
+		{
 			name: "load",
 			description: "Loads tracks/url to the queue",
 			type: "SUB_COMMAND_GROUP",
@@ -158,33 +168,9 @@ module.exports = {
 					name: "all",
 					description:
 						"this will add all the tracks/urls to the queue",
-					type: "SUB_COMMAND",
-					options: [
-						{
-							name: "i",
-							description: "...",
-							type: "STRING",
-							required: true,
-							choices: [
-								{
-									name: "all",
-									value: "all"
-								}
-							]
-						}
-					]
+					type: "SUB_COMMAND"
 				}
 			]
-		},
-		{
-			name: "list",
-			description: "Displays the playlist",
-			type: "SUB_COMMAND"
-		},
-		{
-			name: "delete",
-			description: "Deletes your playlist",
-			type: "SUB_COMMAND"
 		}
 	],
 	/**
@@ -202,10 +188,12 @@ module.exports = {
 			if (!data) {
 				data = new schema({
 					userId: interaction.user.id,
-					playlist: [String]
+					music: {
+						playlist: [String]
+					}
 				});
 
-				data.playlist.splice(0, 1);
+				data.music.playlist.splice(0, 1);
 
 				data.save();
 
@@ -241,7 +229,7 @@ module.exports = {
 			});
 		} else if (data) {
 			if (interaction.options.getSubcommand() === "add") {
-				if (data.playlist.length > 50) {
+				if (data.music.playlist.length > 30) {
 					return interaction.editReply({
 						embeds: [
 							new MessageEmbed()
@@ -251,7 +239,7 @@ module.exports = {
 					});
 				} else {
 					const track = interaction.options.getString("track");
-					data.playlist.push(track);
+					data.music.playlist.push(track);
 					data.save();
 
 					interaction.editReply({
@@ -276,7 +264,7 @@ module.exports = {
 								)
 						]
 					});
-				} else if (index > data.playlist.length) {
+				} else if (index > data.music.playlist.length) {
 					return interaction.editReply({
 						embeds: [
 							new MessageEmbed()
@@ -288,7 +276,7 @@ module.exports = {
 					});
 				}
 
-				data.playlist.splice(index - 1, 1);
+				data.music.playlist.splice(index - 1, 1);
 				data.save();
 
 				interaction.editReply({
@@ -301,7 +289,7 @@ module.exports = {
 					]
 				});
 			} else if (interaction.options.getSubcommand() === "clear") {
-				data.playlist.splice(0, data.playlist.length);
+				data.music.playlist.splice(0, data.music.playlist.length);
 				data.save();
 
 				interaction.editReply({
@@ -313,92 +301,8 @@ module.exports = {
 							)
 					]
 				});
-			} else if (interaction.options.getSubcommand() === "load") {
-				var player = client.manager.get(interaction.guildId);
-
-				const guild = client.guilds.cache.get(interaction.guildId);
-				const member = guild.members.cache.get(
-					interaction.member.user.id
-				);
-				const voiceChannel = member.voice.channel;
-
-				if (!voiceChannel) {
-					return interaction.editReply({
-						embeds: [
-							new MessageEmbed()
-								.setColor(process.env.REDHEX)
-								.setDescription(
-									"**You must be in a voice channel**"
-								)
-						]
-					});
-				} else if (!player) {
-					var player = client.manager.create({
-						guild: interaction.guildId,
-						voiceChannel: voiceChannel.id,
-						textChannel: interaction.channelId,
-						volume: 75,
-						selfDeafen: true
-					});
-				}
-
-				if (player.state !== "CONNECTED") player.connect();
-				player.set("autoplay", false);
-				player.filter = "off";
-
-				const index = interaction.options.getNumber("index");
-				const i = interaction.options.getString("i");
-
-				if (i === "all") {
-					for await (let ik of data.playlist) {
-						let res = await player.search(ik, interaction.user);
-						if (res.loadType === "LOAD_FAILED") {
-							if (!player.queue.current) player.destroy();
-							throw res.exception;
-						}
-
-						await loadTracks(player, res, interaction);
-					}
-				} else if (index) {
-					if (index <= 0) {
-						return interaction.editReply({
-							embeds: [
-								new MessageEmbed()
-									.setColor(process.env.REDHEX)
-									.setDescription(
-										"**The given index subceeds the list limit**"
-									)
-							]
-						});
-					} else if (index > data.playlist.length) {
-						return interaction.editReply({
-							embeds: [
-								new MessageEmbed()
-									.setColor(process.env.REDHEX)
-									.setDescription(
-										"**The given index exceeds the list limit**"
-									)
-							]
-						});
-					} else {
-						let res = await player.search(
-							data.playlist[index - 1],
-							interaction.user
-						);
-
-						await loadTracks(player, res, interaction);
-					}
-				} else {
-					return interaction.editReply({
-						embeds: [
-							new MessageEmbed()
-								.setColor(process.env.REDHEX)
-								.setDescription("**You must choose an option**")
-						]
-					});
-				}
 			} else if (interaction.options.getSubcommand() === "list") {
-				if (data.playlist.length <= 0) {
+				if (data.music.playlist.length <= 0) {
 					return interaction.editReply({
 						embeds: [
 							new MessageEmbed()
@@ -412,8 +316,8 @@ module.exports = {
 
 				let pages = [];
 
-				for (let i = 0; i < data.playlist.length; i += 10) {
-					let v = data.playlist.slice(i, i + 10);
+				for (let i = 0; i < data.music.playlist.length; i += 10) {
+					let v = data.music.playlist.slice(i, i + 10);
 
 					let embed = new MessageEmbed()
 						.setColor(process.env.SIGHEX)
@@ -447,6 +351,91 @@ module.exports = {
 							)
 					]
 				});
+			} else if (interaction.options.getSubcommandGroup() === "load") {
+				var player = client.manager.get(interaction.guildId);
+
+				const guild = client.guilds.cache.get(interaction.guildId);
+				const member = guild.members.cache.get(
+					interaction.member.user.id
+				);
+				const voiceChannel = member.voice.channel;
+
+				if (!voiceChannel) {
+					return interaction.editReply({
+						embeds: [
+							new MessageEmbed()
+								.setColor(process.env.REDHEX)
+								.setDescription(
+									"**You must be in a voice channel**"
+								)
+						]
+					});
+				} else if (!player) {
+					var player = client.manager.create({
+						guild: interaction.guildId,
+						voiceChannel: voiceChannel.id,
+						textChannel: interaction.channelId,
+						volume: 75,
+						selfDeafen: true
+					});
+				}
+
+				if (player.state !== "CONNECTED") player.connect();
+				player.set("autoplay", false);
+				player.filter = "off";
+
+				const sub = interaction.options.getSubcommand();
+
+				if (sub === "all") {
+					for await (let ik of data.music.playlist) {
+						let res = await player.search(ik, interaction.user);
+						if (res.loadType === "LOAD_FAILED") {
+							if (!player.queue.current) player.destroy();
+							throw res.exception;
+						}
+
+						await loadTracks(player, res, interaction);
+					}
+				} else if (sub === "track") {
+					let index = interaction.options.getNumber("index");
+
+					if (index <= 0) {
+						return interaction.editReply({
+							embeds: [
+								new MessageEmbed()
+									.setColor(process.env.REDHEX)
+									.setDescription(
+										"**The given index subceeds the list limit**"
+									)
+							]
+						});
+					} else if (index > data.music.playlist.length) {
+						return interaction.editReply({
+							embeds: [
+								new MessageEmbed()
+									.setColor(process.env.REDHEX)
+									.setDescription(
+										"**The given index exceeds the list limit**"
+									)
+							]
+						});
+					} else {
+						let res = await player.search(
+							data.music.playlist[index - 1],
+							interaction.user
+						);
+
+						await loadTracks(player, res, interaction);
+					}
+				} else {
+					return interaction.editReply({
+						embeds: [
+							new MessageEmbed()
+								.setColor(process.env.REDHEX)
+								.setDescription("**You must choose an option**")
+						]
+					});
+				}
 			}
 		}
 	}

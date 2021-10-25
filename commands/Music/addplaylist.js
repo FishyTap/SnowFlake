@@ -38,7 +38,7 @@ module.exports = {
 					]
 				});
 			} else if (data) {
-				if (data.playlist.length > 50) {
+				if (data.music.playlist.length > 50) {
 					return message.channel.send({
 						embeds: [
 							new MessageEmbed()
@@ -47,7 +47,7 @@ module.exports = {
 						]
 					});
 				} else {
-					data.playlist.push(args.join(" "));
+					data.music.playlist.push(args.join(" "));
 					data.save();
 
 					message.channel.send({

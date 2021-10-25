@@ -1,6 +1,6 @@
 const { Client, Message, MessageEmbed, Collection } = require("discord.js");
 const cooldown = new Map();
-const { customPrefix } = require("../../mongo/functions/prefixes");
+const { customPrefix } = require("../../mongo/functions/guilds/prefixes");
 
 /**
  *

@@ -5,9 +5,11 @@ const schema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	playlist: {
-		type: [String],
-		default: null
+	music: {
+		playlist: {
+			type: [String],
+			default: null
+		}
 	}
 });
 

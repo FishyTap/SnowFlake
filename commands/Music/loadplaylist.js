@@ -1,7 +1,5 @@
 const { Client, Message, MessageEmbed } = require("discord.js");
 const schema = require("../../mongo/schemas/users");
-const pMs = require("pretty-ms");
-const delay = require("delay");
 
 let loadTracks = (player, res, message) => {
 	try {
@@ -169,7 +167,7 @@ module.exports = {
 
 			if (isNaN(args[0])) {
 				if (args[0].toLowerCase() === "all") {
-					for await (let i of data.playlist) {
+					for await (let i of data.music.playlist) {
 						let res = await player.search(i, message.author);
 						if (res.loadType === "LOAD_FAILED") {
 							if (!player.queue.current) player.destroy();
@@ -198,7 +196,7 @@ module.exports = {
 								)
 						]
 					});
-				} else if (args[0] > data.playlist.length) {
+				} else if (args[0] > data.music.playlist.length) {
 					return message.channel.send({
 						embeds: [
 							new MessageEmbed()
@@ -211,7 +209,7 @@ module.exports = {
 				} else {
 					let index = parseInt(args[0]);
 					let res = await player.search(
-						data.playlist[index - 1],
+						data.music.playlist[index - 1],
 						message.author
 					);
 
