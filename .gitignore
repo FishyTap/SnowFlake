@@ -1,3 +1,3 @@
 node_modules
-loaders/features/rpc.js
-icons
+features/rpc.js
+assets

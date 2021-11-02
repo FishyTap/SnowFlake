@@ -6,14 +6,13 @@
   <h3 align="center">SnowFlake</h3>
 
   <p align="center">
-    SnowFlake is a Multi-Purpose bot with many Accessibilities, Features!
-    <br />
-    <br />
-    <a href="https://discord.com/api/oauth2/authorize?client_id=875635121770889257&permissions=36768832&scope=applications.commands%20bot">Invite</a>
+    SnowFlake is a Multi-Purpose bot with many Accessibilities and Features!
+    <br /><br />
+    <a href=https://discord.com/api/oauth2/authorize?client_id=884225174528995358&permissions=8&scope=bot%20applications.commands>Invite</a>
     ·
     <a href="https://github.com/FishyTap/SnowFlake/issues">Report Bug</a>
     ·
-    <a href="https://github.com/FishyTap/SnowFlake/issues">Request Feature</a>
+    <a href="https:dsc.gg/snowflake-developer">Join</a>
   </p>
 </p>
 
