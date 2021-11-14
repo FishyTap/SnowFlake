@@ -29,7 +29,7 @@ client.snipes = new Collection();
 
 require(path.join(__dirname, "./loaders/loader"))(client);
 
-const test = true;
+const test = false;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
@@ -68,8 +68,8 @@ client.login(test == false ? process.env.TOKEN : process.env.TEST);
 	let dir = "./events/lavalink";
 
 	fs.readdirSync(path.join(__dirname, dir))
-		.filter((files) => files.endsWith(".js"))
-		.forEach((file) => {
+		.filter(files => files.endsWith(".js"))
+		.forEach(file => {
 			try {
 				let events = require(path.join(__dirname, dir, file));
 
@@ -99,9 +99,9 @@ client.login(test == false ? process.env.TOKEN : process.env.TEST);
 		client.manager.init(client.user.id);
 	});
 
-	client.on("raw", (i) => {
+	client.on("raw", i => {
 		client.manager.updateVoiceState(i);
 	});
 })();
 
-module.export = { test };
+module.exports = { test };

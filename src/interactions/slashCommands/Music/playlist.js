@@ -1,4 +1,5 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { create } = require("../../../mongo/functions/users/create");
 const schema = require("../../../mongo/schemas/users");
 const { Pagination } = require("../../../utils/Pagination");
 
@@ -186,16 +187,7 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === "create") {
 			if (!data) {
-				data = new schema({
-					userId: interaction.user.id,
-					music: {
-						playlist: [String]
-					}
-				});
-
-				data.music.playlist.splice(0, 1);
-
-				data.save();
+				data = await create(client, interaction.user.id);
 
 				return interaction.editReply({
 					embeds: [
@@ -239,8 +231,8 @@ module.exports = {
 					});
 				} else {
 					const track = interaction.options.getString("track");
-					data.music.playlist.push(track);
-					data.save();
+					await data.music.playlist.push(track);
+					await data.save();
 
 					interaction.editReply({
 						embeds: [
@@ -276,8 +268,8 @@ module.exports = {
 					});
 				}
 
-				data.music.playlist.splice(index - 1, 1);
-				data.save();
+				await data.music.playlist.splice(index - 1, 1);
+				await data.save();
 
 				interaction.editReply({
 					embeds: [
@@ -289,8 +281,8 @@ module.exports = {
 					]
 				});
 			} else if (interaction.options.getSubcommand() === "clear") {
-				data.music.playlist.splice(0, data.music.playlist.length);
-				data.save();
+				await data.music.playlist.splice(0, data.music.playlist.length);
+				await data.save();
 
 				interaction.editReply({
 					embeds: [

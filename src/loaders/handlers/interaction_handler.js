@@ -55,6 +55,7 @@ module.exports = async (client) => {
 	const servers = [
 		"797709775898542110", // Main
 		"882582756482252840", // Test
+		"890539013335842816", // Community
 		"728751693503922190" // Dev
 	];
 	let { test } = require("../../index");
@@ -64,7 +65,7 @@ module.exports = async (client) => {
 			servers.forEach(async (guilds) => {
 				let guild = client.guilds.cache.get(guilds);
 
-				await guild?.commands.set(cmdArray).then(async (cmd) => {
+				guild?.commands?.set(cmdArray).then(async (cmd) => {
 					const getRoles = (commandNames) => {
 						const perms = cmdArray.find(
 							(x) => x.name === commandNames
@@ -79,7 +80,6 @@ module.exports = async (client) => {
 					const fullPermissions = cmd.reduce((accumulater, x) => {
 						const roles = getRoles(x.name);
 						if (!roles) return accumulater;
-
 						const permissions = roles.reduce((a, v) => {
 							return [
 								...a,
@@ -90,7 +90,6 @@ module.exports = async (client) => {
 								}
 							];
 						}, []);
-
 						return [
 							...accumulater,
 							{
@@ -108,7 +107,7 @@ module.exports = async (client) => {
 				.set(cmdArray)
 				.then(async (cmd) => {
 					client.guilds.cache.forEach(async (guild) => {
-						const getRoles = (commandNames) => {
+						let getRoles = (commandNames) => {
 							const perms = cmdArray.find(
 								(x) => x.name === commandNames
 							).permissions;
@@ -119,7 +118,7 @@ module.exports = async (client) => {
 							);
 						};
 
-						const fullPermissions = cmd.reduce((accumulater, x) => {
+						let fullPermissions = cmd.reduce((accumulater, x) => {
 							const roles = getRoles(x.name);
 							if (!roles) return accumulater;
 
@@ -143,7 +142,9 @@ module.exports = async (client) => {
 							];
 						}, []);
 
-						guild.commands.permissions.set({ fullPermissions });
+						guild.commands.permissions.set({
+							fullPermissions
+						});
 					});
 				});
 		}

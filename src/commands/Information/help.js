@@ -31,7 +31,8 @@ module.exports = {
 			FUN: "🎮",
 			INFORMATION: "🔎",
 			MUSIC: "🎧",
-			UTILITIES: "⚙"
+			UTILITIES: "⚙",
+			ECONOMY: "💳"
 		};
 
 		if (!args[0]) {
@@ -139,6 +140,8 @@ module.exports = {
 					INFORMATION:
 						"These are the Information commands. You can use these commands to get information that you are looking for!",
 					MUSIC: "These are the Music commands. You can play any song or playlist that you want!",
+					ECONOMY:
+						"These are the Economy commands. You can earn money but make sure to manage them well!",
 					UTILITIES:
 						"These are the Utilities commands. Some of the commands requires you to have certain permissions before using!"
 				};

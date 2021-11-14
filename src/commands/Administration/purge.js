@@ -36,7 +36,7 @@ module.exports = {
 			});
 		}
 
-		const amount = args[0];
+		const amount = Number(args[0]);
 
 		if (amount > 100) {
 			return message.channel.send({
@@ -48,14 +48,14 @@ module.exports = {
 			});
 		}
 
-		let msg = message.channel.messages.fetch({ limit: amount });
+		let msg = await message.channel.messages.fetch({ limit: amount });
 
-		let filtered = (await msg).filter(
+		let filtered = msg.filter(
 			(m) => Date.now() - m.createdTimestamp < ms("14 days")
 		);
 
-		setTimeout(() => {
-			message.channel.bulkDelete(filtered);
+		setTimeout(async () => {
+			await message.channel?.bulkDelete(filtered);
 		}, 750);
 	}
 };

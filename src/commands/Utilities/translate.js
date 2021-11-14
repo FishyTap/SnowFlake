@@ -16,9 +16,18 @@ module.exports = {
 	callbacks: async (client, message, args) => {
 		const defaultLanguage = "English";
 
-		const result = await translate(args.join(" "), {
-			to: defaultLanguage
-		}).catch(() => {});
+		let language = args[0].toLowerCase();
+		let query = args.slice(1).join(" ");
+
+		let result;
+
+		try {
+			result = await translate(query, {
+				to: language ? language : defaultLanguage.toLowerCase()
+			}).catch(() => {});
+		} catch (err) {
+			console.log(err);
+		}
 
 		message.channel.send({
 			embeds: [
@@ -30,7 +39,7 @@ module.exports = {
 							dynamic: true
 						})
 					)
-					.setDescription(`${result?.text}`)
+					.setDescription(`${result?.text ? result?.text : query}`)
 					.setTimestamp()
 			]
 		});

@@ -24,21 +24,21 @@ module.exports = {
 			HIGHEST: "Highest"
 		};
 
-		const regions = {
-			brazil: "Brazil",
-			europe: "Europe",
-			hongkong: "Hong Kong",
-			india: "India",
-			japan: "Japan",
-			russia: "Russia",
-			singapore: "Singapore",
-			southafrica: "South Africa",
-			sydeny: "Sydeny",
-			"us-central": "US Central",
-			"us-east": "US East",
-			"us-west": "US Westside",
-			"us-south": "US Southside"
-		};
+		// const regions = {
+		// 	brazil: "Brazil",
+		// 	europe: "Europe",
+		// 	hongkong: "Hong Kong",
+		// 	india: "India",
+		// 	japan: "Japan",
+		// 	russia: "Russia",
+		// 	singapore: "Singapore",
+		// 	southafrica: "South Africa",
+		// 	sydeny: "Sydeny",
+		// 	"us-central": "US Central",
+		// 	"us-east": "US East",
+		// 	"us-west": "US Westside",
+		// 	"us-south": "US Southside"
+		// };
 
 		const roles = interaction.guild.roles.cache
 			.sort((a, b) => b.position - a.position)

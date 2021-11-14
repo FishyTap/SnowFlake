@@ -10,6 +10,24 @@ const schema = mongoose.Schema({
 			type: [String],
 			default: null
 		}
+	},
+	economy: {
+		wallet: {
+			type: Number,
+			default: 1000
+		},
+		bank: {
+			type: Number,
+			default: 0
+		},
+		daily: {
+			type: Number,
+			default: 0
+		},
+		monthly: {
+			type: Number,
+			default: 0
+		}
 	}
 });
 

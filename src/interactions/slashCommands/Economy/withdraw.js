@@ -1,0 +1,123 @@
+const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
+const coins = require("../../../mongo/functions/users/coins");
+const { create } = require("../../../mongo/functions/users/create");
+const schema = require("../../../mongo/schemas/users");
+
+module.exports = {
+	name: "withdraw",
+	description: "Withdraws money from your bank",
+	type: "CHAT_INPUT",
+	options: [
+		{
+			name: "amount",
+			description: "the amount you want to withdraw",
+			type: "STRING",
+			required: true
+		}
+	],
+	/**
+	 *
+	 * @param {Client} client
+	 * @param {CommandInteraction} interaction
+	 */
+	callbacks: async (client, interaction) => {
+		await interaction.deferReply({
+			ephemeral: false
+		});
+
+		let user = interaction.guild.members.cache.get(
+			interaction.user.id
+		).user;
+
+		if (!user) {
+			return interaction.editReply({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.REDHEX)
+						.setDescription("**Unable to find the user**")
+				]
+			});
+		}
+
+		let data = await schema.findOne({ userId: user.id });
+
+		if (!data) {
+			data = await create(client, user.id);
+		}
+
+		let amount = interaction.options.getString("amount");
+
+		if (data.economy.bank <= 0) {
+			return interaction.editReply({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.REDHEX)
+						.setDescription("**Your bank is currently empty**")
+				]
+			});
+		} else {
+			if (isNaN(amount)) {
+				if (
+					amount.toLowerCase() == "all" ||
+					amount.toLowerCase() == "max"
+				) {
+					amount = Number(data.economy.bank);
+
+					await coins.bank(client, user.id, -amount);
+					await coins.wallet(client, user.id, amount);
+				} else {
+					return interaction.editReply({
+						embeds: [
+							new MessageEmbed()
+								.setColor(process.env.REDHEX)
+								.setDescription(
+									"**You must state how the amount of money you want to withdraw**"
+								)
+						]
+					});
+				}
+			} else {
+				amount = Number(amount);
+
+				if (amount <= 0) {
+					return interaction.editReply({
+						embeds: [
+							new MessageEmbed()
+								.setColor(process.env.REDHEX)
+								.setDescription(
+									"**Unexpected withdraw amount**"
+								)
+						]
+					});
+				} else if (amount > data.economy.bank) {
+					return interaction.editReply({
+						embeds: [
+							new MessageEmbed()
+								.setColor(process.env.REDHEX)
+								.setDescription(
+									"**Unexpected withdraw amount**"
+								)
+						]
+					});
+				} else {
+					await coins.bank(client, user.id, -amount);
+					await coins.wallet(client, user.id, amount);
+				}
+			}
+		}
+
+		interaction.editReply({
+			embeds: [
+				new MessageEmbed()
+					.setColor(process.env.SIGHEX)
+					.setDescription(
+						[
+							`**You have withdrawn ${Number(
+								amount
+							).toLocaleString()} coins from your bank**`
+						].join("\n")
+					)
+			]
+		});
+	}
+};

@@ -8,7 +8,7 @@ module.exports = {
 	options: [
 		{
 			name: "user",
-			description: "target user",
+			description: "the targetted user",
 			type: "USER",
 			required: true
 		},

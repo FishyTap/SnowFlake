@@ -16,7 +16,6 @@ module.exports = async (client, player, track) => {
 		embeds: [
 			new MessageEmbed()
 				.setColor(process.env.SIGHEX)
-				// .setTitle(`**🎵  Playing  🎵**`)
 				.setDescription(
 					`**Now playing [${track.title}](${track.uri})**`
 				)

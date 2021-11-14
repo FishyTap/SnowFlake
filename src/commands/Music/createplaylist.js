@@ -1,4 +1,5 @@
 const { Client, Message, MessageEmbed } = require("discord.js");
+const { create } = require("../../mongo/functions/users/create");
 const schema = require("../../mongo/schemas/users");
 
 module.exports = {
@@ -16,16 +17,7 @@ module.exports = {
 	callbacks: async (client, message, args) => {
 		let data = await schema.findOne({ userId: message.author.id });
 		if (!data) {
-			data = new schema({
-				userId: message.author.id,
-				music: {
-					playlist: [String]
-				}
-			});
-
-			data.music.playlist.splice(0, 1);
-
-			data.save();
+			data = await create(client, message.author.id);
 
 			return message.channel.send({
 				embeds: [

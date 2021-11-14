@@ -11,6 +11,12 @@ module.exports = {
 			description: "the query you want to translate",
 			type: "STRING",
 			required: true
+		},
+		{
+			name: "language",
+			description: "the language you want to translate to",
+			type: "STRING",
+			required: false
 		}
 	],
 	/**
@@ -24,12 +30,20 @@ module.exports = {
 		});
 
 		const query = interaction.options.getString("query");
+		const language = interaction.options
+			.getString("language")
+			.toLowerCase();
 
-		const defaultLanguage = "English";
+		let defaultLanguage = "English";
+		let result;
 
-		const result = await translate(query, {
-			to: defaultLanguage
-		}).catch(() => {});
+		try {
+			result = await translate(query, {
+				to: language ? language : defaultLanguage.toLowerCase()
+			}).catch(() => {});
+		} catch (err) {
+			console.log(err);
+		}
 
 		interaction.editReply({
 			embeds: [
@@ -41,7 +55,7 @@ module.exports = {
 							dynamic: true
 						})
 					)
-					.setDescription(`${result?.text}`)
+					.setDescription(`${result?.text ? result?.text : query}`)
 					.setTimestamp()
 			]
 		});

@@ -37,14 +37,16 @@ module.exports = {
 				});
 			}
 
-			let msg = interaction.channel.messages.fetch({ limit: amount });
+			let msg = await interaction.channel.messages.fetch({
+				limit: amount
+			});
 
-			let filtered = (await msg).filter(
+			let filtered = msg.filter(
 				(m) => Date.now() - m.createdTimestamp < ms("14 days")
 			);
 
-			setTimeout(() => {
-				interaction.channel.bulkDelete(filtered);
+			setTimeout(async () => {
+				await interaction.channel?.bulkDelete(filtered);
 			}, 750);
 		} catch {
 			interaction.followUp({

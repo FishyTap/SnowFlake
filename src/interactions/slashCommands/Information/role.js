@@ -6,7 +6,7 @@ module.exports = {
 	type: "CHAT_INPUT",
 	options: [
 		{
-			name: "i",
+			name: "input",
 			description: "the role you want to see the information of",
 			type: "ROLE",
 			required: false
@@ -22,7 +22,7 @@ module.exports = {
 			ephemeral: false
 		});
 
-		let role = interaction.options.getRole("i");
+		let role = interaction.options.getRole("input");
 
 		if (role) {
 			let rTarget = interaction.guild.roles.cache.find(
