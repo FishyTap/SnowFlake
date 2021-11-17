@@ -29,7 +29,7 @@ client.snipes = new Collection();
 
 require(path.join(__dirname, "./loaders/loader"))(client);
 
-const test = true;
+const test = false;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
