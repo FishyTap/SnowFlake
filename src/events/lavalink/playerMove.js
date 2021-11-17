@@ -19,7 +19,7 @@ module.exports = async (client, player, oldChannel, newChannel) => {
 			new MessageEmbed()
 				.setColor(process.env.SIGHEX)
 				.setDescription(
-					`**I have been moved from $<#${oldChannel.id}> to <#${newChannel.id}>**`
+					`**I have been moved from  <#${oldChannel}>  to  <#${newChannel}>**`
 				)
 		]
 	});

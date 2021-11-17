@@ -21,4 +21,5 @@ module.exports = async (client, player, track) => {
 				)
 		]
 	});
+	if (!player.voiceChannel) player.destroy();
 };

@@ -6,8 +6,8 @@ const moment = require("moment");
  * @param {Client} client
  */
 
-module.exports = (client) => {
-	client.on("messageCreate", async (message) => {
+module.exports = client => {
+	client.on("messageCreate", async message => {
 		if (!message.guild || message.author.bot) return;
 
 		const mentionedMember = message.mentions.members.first();
@@ -24,9 +24,14 @@ module.exports = (client) => {
 					embeds: [
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
+							.setAuthor(
+								`${mentionedMember.user.username} is currently afk!`,
+								mentionedMember.user.displayAvatarURL({
+									dynamic: true
+								})
+							)
 							.setDescription(
 								[
-									`**${mentionedMember.user.username} is currently afk!**`,
 									`**Reason:** ${reason}`,
 									`**Time:** ${timeAgo}`
 								].join("\n")

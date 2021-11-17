@@ -6,16 +6,16 @@ const ms = require("ms");
  *
  * @param {Client} client
  */
-module.exports = (client) => {
+module.exports = client => {
 	// return;
 	let timer = ms("10s");
 
 	setInterval(async () => {
 		try {
 			let guild = client?.guilds?.cache?.get("797709775898542110");
-			let channel = guild?.channels?.cache?.get("907587831831068674");
+			let channel = guild?.channels?.cache?.get("892264839269986314");
 
-			let categories = ["hentai", "ecchi", "sex"];
+			let categories = ["hentai", "ecchi"];
 			let value = Number(
 				Math.floor(Math.random() * (Number(categories.length) - 1)) + 0
 			);

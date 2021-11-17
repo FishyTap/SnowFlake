@@ -30,9 +30,7 @@ module.exports = {
 		});
 
 		const query = interaction.options.getString("query");
-		const language = interaction.options
-			.getString("language")
-			.toLowerCase();
+		const language = interaction.options.getString("language");
 
 		let defaultLanguage = "English";
 		let result;

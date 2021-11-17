@@ -11,7 +11,8 @@ const chalk = require("chalk");
 
 module.exports = async (client, player, payload) => {
 	if (payload.byRemote == true) {
-		player.destroy();
+		if (player.twentyFourSeven) return;
+		else player.destroy();
 	}
-	console.log(chalk.bold.red(`Socket closed due to ${payload.reason}`));
+	console.log(chalk.bold.red(`Socket closed ==> ${payload.reason}`));
 };

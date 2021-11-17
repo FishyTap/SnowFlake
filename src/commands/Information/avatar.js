@@ -35,33 +35,25 @@ module.exports = {
 						member.user.tag,
 						member.user.displayAvatarURL({ dynamic: true })
 					)
-					.setTitle("**Download Links**")
-					.addFields([
-						{
-							name: "_ _",
-							value: `**[dynamic](${member.user.displayAvatarURL({
-								dynamic: true,
-								size: 512
-							})})**`,
-							inline: true
-						},
-						{
-							name: "_ _",
-							value: `**[png](${member.user.displayAvatarURL({
-								format: "png",
-								size: 512
-							})})**`,
-							inline: true
-						},
-						{
-							name: "_ _",
-							value: `**[jpg](${member.user.displayAvatarURL({
-								format: "jpg",
-								size: 512
-							})})**`,
-							inline: true
-						}
-					])
+					.setDescription(
+						`**[PNG](${avatarUrlFormat(
+							member.user,
+							512,
+							"png"
+						)})    |    [JPG](${avatarUrlFormat(
+							member.user,
+							512,
+							"jpg"
+						)})    |    [JPEG](${avatarUrlFormat(
+							member.user,
+							512,
+							"jpeg"
+						)})    |    [WEBP](${avatarUrlFormat(
+							member.user,
+							512,
+							"webp"
+						)})**`
+					)
 					.setImage(
 						member.user.displayAvatarURL({
 							dynamic: true,

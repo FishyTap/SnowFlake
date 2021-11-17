@@ -6,7 +6,9 @@ const chalk = require("chalk");
  * @param {Client} client
  */
 
-module.exports = (client) => {
+module.exports = client => {
+	client?.manager?.init(client.user.id);
+
 	console.log(
 		chalk.bold.hex("#FF5555")("|") +
 			" " +

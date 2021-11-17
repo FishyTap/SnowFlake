@@ -29,17 +29,17 @@ client.snipes = new Collection();
 
 require(path.join(__dirname, "./loaders/loader"))(client);
 
-const test = false;
+const test = true;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
 // Lavalink
 (async () => {
 	const { Manager } = require("erela.js");
+	const Apple = require("erela.js-apple");
 	const Deezer = require("erela.js-deezer");
 	const Facebook = require("erela.js-facebook");
 	const Spotify = require("erela.js-spotify");
-	const fs = require("fs");
 
 	client.manager = new Manager({
 		nodes: [
@@ -53,6 +53,7 @@ client.login(test == false ? process.env.TOKEN : process.env.TEST);
 		],
 		plugins: [
 			new Deezer(),
+			new Apple(),
 			new Facebook(),
 			new Spotify({
 				clientID: process.env.SPOTIFY_ID,
@@ -65,43 +66,38 @@ client.login(test == false ? process.env.TOKEN : process.env.TEST);
 		}
 	});
 
-	let dir = "./events/lavalink";
+	// Lavalink_handler
+	(async () => {
+		const fs = require("fs");
+		let dir = "./events/lavalink";
+		fs.readdirSync(path.join(__dirname, dir))
+			.filter(files => files.endsWith(".js"))
+			.forEach(file => {
+				try {
+					let events = require(path.join(__dirname, dir, file));
 
-	fs.readdirSync(path.join(__dirname, dir))
-		.filter(files => files.endsWith(".js"))
-		.forEach(file => {
-			try {
-				let events = require(path.join(__dirname, dir, file));
+					let name = file.split(".")[0];
 
-				let name = file.split(".")[0];
-
-				client.manager.on(name, events.bind(null, client));
-				console.log(
-					chalk.bold.hex(process.env.SIDEBARHEX)("|") +
-						" " +
-						chalk.bold.white("[Lavalink]") +
-						" " +
-						chalk.bold.hex(process.env.REDHEX)(`"${file}"`)
-				);
-			} catch (err) {
-				console.log(err);
-				console.log(
-					chalk.bold.hex(process.env.SIDEBARHEX)("|") +
-						" " +
-						chalk.bold.hex(process.env.ERRORHEX)("[Lavalink]") +
-						" " +
-						chalk.bold.hex(process.env.ERRORHEX)(`"${file}"`)
-				);
-			}
-		});
-
-	client.on("ready", () => {
-		client.manager.init(client.user.id);
-	});
-
-	client.on("raw", i => {
-		client.manager.updateVoiceState(i);
-	});
+					client?.manager?.on(name, events.bind(null, client));
+					console.log(
+						chalk.bold.hex(process.env.SIDEBARHEX)("|") +
+							" " +
+							chalk.bold.white("[Lavalink]") +
+							" " +
+							chalk.bold.hex(process.env.REDHEX)(`"${file}"`)
+					);
+				} catch (err) {
+					console.log(err);
+					console.log(
+						chalk.bold.hex(process.env.SIDEBARHEX)("|") +
+							" " +
+							chalk.bold.hex(process.env.ERRORHEX)("[Lavalink]") +
+							" " +
+							chalk.bold.hex(process.env.ERRORHEX)(`"${file}"`)
+					);
+				}
+			});
+	})();
 })();
 
 module.exports = { test };

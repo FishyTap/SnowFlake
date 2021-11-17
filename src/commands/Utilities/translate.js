@@ -15,15 +15,13 @@ module.exports = {
 	 */
 	callbacks: async (client, message, args) => {
 		const defaultLanguage = "English";
-
-		let language = args[0].toLowerCase();
-		let query = args.slice(1).join(" ");
+		let query = args.join(" ");
 
 		let result;
 
 		try {
 			result = await translate(query, {
-				to: language ? language : defaultLanguage.toLowerCase()
+				to: defaultLanguage.toLowerCase()
 			}).catch(() => {});
 		} catch (err) {
 			console.log(err);
