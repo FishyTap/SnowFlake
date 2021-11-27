@@ -55,7 +55,7 @@ module.exports = {
 			player.queue.clear();
 			player.stop();
 
-			message.channel.send({
+			interaction.editReply({
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)

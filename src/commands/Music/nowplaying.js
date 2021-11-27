@@ -120,28 +120,39 @@ module.exports = {
 			if (player.twentyFourSeven) mode247 = "enabled";
 			else if (!player.twentyFourSeven) mode247 = "disabled";
 
-			message.channel.send({
-				embeds: [
-					new MessageEmbed()
-						.setColor(process.env.SIGHEX)
-						.setAuthor( "Now Playing", emoji.muzik?.url)
-						.setDescription(`**[${track.title}](${track.uri})**`)
-						.setThumbnail(ytData ? ytData.thumbnail.url : null)
-						.addField(`${emoji.sound}  Volume`, `**\`${player.volume}%\`**`, true)
-						.addField(`${emoji.equalizer}  Equalizer`, `**\`${player.filter}\`**`, true)
-						.addField(`${emoji[247]}  24/7`, `**\`${mode247}\`**`, true)
-						.addField(`${emoji.autoplay}  Autoplay`, `**\`${aP}\`**`, true)
-						.addField(`${emoji.loop}  Loop`, `**\`${loop}\`**`, true)
-						.addField(`${emoji.views}  Views`,`**\`${video?.views ? video?.views?.toLocaleString() : "None"}\`**`,true)
-						.addField(`${emoji.like}  Likes`, `**\`${ytData?.likes ? ytData?.likes.toLocaleString() : "None"}\`**`, true)
-						.addField(`${emoji.dislike}  Dislikes`, `**\`${ytData?.dislikes ? ytData?.dislikes.toLocaleString() : "None"}\`**`, true)
-						.addField(`${emoji.calender}  Uploaded`,`**\`${video?.ago ? video?.ago : "None"}\`**`,true)
-						.addField(
-							`**|**${progressbar(duration, position, size, line, slider)}**|**`,
-							`**Duration:  \`${pMs(position, {verbose: true})} / ${pMs(duration, { verbose: true })}\`**`
-						)
-				]
-			});
+			try {
+				message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.SIGHEX)
+							.setAuthor( "Now Playing", emoji.muzik?.url)
+							.setDescription(`**[${track.title}](${track.uri})**`)
+							.setThumbnail(ytData ? ytData.thumbnail.url : null)
+							.addField(`${emoji.sound}  Volume`, `**\`${player.volume}%\`**`, true)
+							.addField(`${emoji.equalizer}  Equalizer`, `**\`${player.filter}\`**`, true)
+							.addField(`${emoji[247]}  24/7`, `**\`${mode247}\`**`, true)
+							.addField(`${emoji.autoplay}  Autoplay`, `**\`${aP}\`**`, true)
+							.addField(`${emoji.loop}  Loop`, `**\`${loop}\`**`, true)
+							.addField(`${emoji.views}  Views`,`**\`${video?.views ? video?.views?.toLocaleString() : "None"}\`**`,true)
+							.addField(`${emoji.like}  Likes`, `**\`${ytData?.likes ? ytData?.likes.toLocaleString() : "None"}\`**`, true)
+							.addField(`${emoji.dislike}  Dislikes`, `**\`${ytData?.dislikes ? ytData?.dislikes.toLocaleString() : "None"}\`**`, true)
+							.addField(`${emoji.calender}  Uploaded`,`**\`${video?.ago ? video?.ago : "None"}\`**`,true)
+							.addField(
+								`**|**${progressbar(duration, position, size, line, slider)}**|**`,
+								`**Duration:  \`${pMs(position, {verbose: true})} / ${pMs(duration, { verbose: true })}\`**`
+							)
+					]
+				});
+			} catch (err) {
+				console.log(err);
+				message.channel.send({
+					embeds: [
+						new MessageEmbed()
+							.setColor(process.env.REDHEX)
+							.setDescription("**An Error Occured**")
+					]
+				})
+			}
 		}
 	}
 };

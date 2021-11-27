@@ -1,13 +1,13 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 
 module.exports = {
-	name: "filter",
-	description: "Sets the filter",
+	name: "equalizer",
+	description: "Sets the equalizer",
 	type: "CHAT_INPUT",
 	options: [
 		{
-			name: "filter",
-			description: "the filter you want to change to",
+			name: "equalizer",
+			description: "the equalizer you want to change to",
 			type: "STRING",
 			required: true,
 			choices: [
@@ -51,7 +51,7 @@ module.exports = {
 			ephemeral: false
 		});
 
-		let filter = interaction.options.getString("filter");
+		let equalizer = interaction.options.getString("equalizer");
 		var player = interaction.client.manager.get(interaction.guild.id);
 
 		const guild = client.guilds.cache.get(interaction.guildId);
@@ -90,12 +90,12 @@ module.exports = {
 		} else {
 			let thing = new MessageEmbed();
 
-			if (filter == "none") {
+			if (equalizer == "none") {
 				thing
-					.setDescription("**The filter is now set to `none`**")
+					.setDescription("**The equalizer is now set to `none`**")
 					.setColor(process.env.SIGHEX);
 				player.clearEQ();
-			} else if (filter == "party") {
+			} else if (equalizer == "party") {
 				var bands = [
 					{ band: 0, gain: -1.16 },
 					{ band: 1, gain: 0.28 },
@@ -108,11 +108,11 @@ module.exports = {
 					{ band: 8, gain: -0.21 }
 				];
 				thing
-					.setDescription("**The filter is now set to `party`**")
+					.setDescription("**The equalizer is now set to `party`**")
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "party";
-			} else if (filter == "bass") {
+			} else if (equalizer == "bass") {
 				var bands = [
 					{ band: 0, gain: 0.6 },
 					{ band: 1, gain: 0.7 },
@@ -131,11 +131,11 @@ module.exports = {
 					{ band: 14, gain: 0 }
 				];
 				thing
-					.setDescription("**The filter is now set to `bass`**")
+					.setDescription("**The equalizer is now set to `bass`**")
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "bass";
-			} else if (filter == "radio") {
+			} else if (equalizer == "radio") {
 				var bands = [
 					{ band: 0, gain: 0.65 },
 					{ band: 1, gain: 0.45 },
@@ -154,11 +154,11 @@ module.exports = {
 					{ band: 14, gain: 0 }
 				];
 				thing
-					.setDescription("**The filter is now set to `radio`**")
+					.setDescription("**The equalizer is now set to `radio`**")
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "radio";
-			} else if (filter == "pop") {
+			} else if (equalizer == "pop") {
 				var bands = [
 					{ band: 0, gain: -0.25 },
 					{ band: 1, gain: 0.48 },
@@ -177,11 +177,11 @@ module.exports = {
 					{ band: 14, gain: 0 }
 				];
 				thing
-					.setDescription("**The filter is now set to `pop`**")
+					.setDescription("**The equalizer is now set to `pop`**")
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "pop";
-			} else if (filter == "trablebass") {
+			} else if (equalizer == "trablebass") {
 				var bands = [
 					{ band: 0, gain: 0.6 },
 					{ band: 1, gain: 0.67 },
@@ -200,20 +200,24 @@ module.exports = {
 					{ band: 14, gain: 0 }
 				];
 				thing
-					.setDescription("**The filter is now set to `trablebass`**")
+					.setDescription(
+						"**The equalizer is now set to `trablebass`**"
+					)
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "trablebass";
-			} else if (filter == "bassboost") {
+			} else if (equalizer == "bassboost") {
 				var bands = new Array(7)
 					.fill(null)
 					.map((_, i) => ({ band: i, gain: 0.25 }));
 				thing
-					.setDescription("**The filter is now set to `bassboost`**")
+					.setDescription(
+						"**The equalizer is now set to `bassboost`**"
+					)
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "bassboost";
-			} else if (filter == "soft") {
+			} else if (equalizer == "soft") {
 				var bands = [
 					{ band: 0, gain: 0 },
 					{ band: 1, gain: 0 },
@@ -232,13 +236,13 @@ module.exports = {
 					{ band: 14, gain: -0.25 }
 				];
 				thing
-					.setDescription("**The filter is now set to `soft`**")
+					.setDescription("**The equalizer is now set to `soft`**")
 					.setColor(process.env.SIGHEX);
 				player.setEQ(...bands);
 				player.filter = "soft";
 			} else {
 				thing
-					.setDescription("**Unknown Filter**")
+					.setDescription("**Unknown Equalizer**")
 					.setColor(process.env.REDHEX);
 			}
 			return interaction.editReply({ embeds: [thing] });

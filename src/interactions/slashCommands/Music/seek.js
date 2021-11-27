@@ -84,7 +84,7 @@ module.exports = {
 								.setDescription(
 									`⏩ **Track seeked to  \`${pMs(
 										player.position,
-										{ verbose: true }
+										{ compact: true }
 									)}\`**`
 								)
 						]
@@ -99,7 +99,7 @@ module.exports = {
 								.setDescription(
 									`⏪ **Track seeked to  \`${pMs(
 										player.position,
-										{ verbose: true }
+										{ compact: true }
 									)}\`**`
 								)
 						]

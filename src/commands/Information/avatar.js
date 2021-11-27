@@ -2,7 +2,7 @@ const { Client, Message, MessageEmbed } = require("discord.js");
 
 module.exports = {
 	name: "avatar",
-	aliases: [],
+	aliases: ["av"],
 	cooldown: 0,
 	permissions: [],
 	usage: "<optional: user>",

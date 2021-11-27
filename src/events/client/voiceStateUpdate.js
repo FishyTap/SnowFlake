@@ -50,7 +50,7 @@ module.exports = async (client, oldState, newState) => {
 						new MessageEmbed()
 							.setColor(process.env.SIGHEX)
 							.setDescription(
-								`**Finally wants to listen to my melody**`
+								`**Finally wants to someone wants listen to my melody**`
 							)
 					]
 				});

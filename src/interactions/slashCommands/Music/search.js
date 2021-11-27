@@ -96,7 +96,7 @@ module.exports = {
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.SIGHEX)
-						.setTitle("🔎  **Search Results**  🔎")
+						.setTitle("🔎  **Search Results**")
 						.setDescription(track.substr(0, 2048))
 				]
 			});
@@ -111,8 +111,8 @@ module.exports = {
 							.setFooter("Respond with 'cancel' to discontinue")
 					]
 				})
-				.then(async (msg) => {
-					let filter = (i) => i.author.id === interaction.user.id;
+				.then(async msg => {
+					let filter = i => i.author.id === interaction.user.id;
 
 					await msg.channel
 						.awaitMessages({
@@ -120,7 +120,7 @@ module.exports = {
 							max: 1,
 							time: 30 * 1000
 						})
-						.then(async (collector) => {
+						.then(async collector => {
 							if (
 								collector.first().content.toLowerCase() ===
 								"cancel"
