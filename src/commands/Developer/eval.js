@@ -32,6 +32,7 @@ module.exports = {
 	 * @param {String[]} args
 	 */
 	callbacks: async (client, message, args) => {
+		if (!message.author.id == client.owner.id) return;
 		let code = args.join(" ");
 
 		if (!code || code == "")
