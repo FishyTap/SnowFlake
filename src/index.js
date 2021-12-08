@@ -1,6 +1,6 @@
 console.clear();
 
-const { Client, Collection, Intents } = require("discord.js");
+const { Client, Collection, Intents, MessageEmbed } = require("discord.js");
 const path = require("path");
 const chalk = require("chalk");
 require("dotenv").config();
@@ -33,11 +33,12 @@ const test = false;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
-client.guilds.cache.forEach(guild => {
-	if (!guild.me.permissions.has("ADMINISTRATOR")) {
-		return;
-	}
-	return guild;
+process.on("unhandledRejection", reason => {
+	console.log(err);
+});
+
+process.on("uncaughtExceptionMonitor", err => {
+	console.log(err);
 });
 
 // Lavalink
