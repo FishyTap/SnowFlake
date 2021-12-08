@@ -45,7 +45,7 @@ module.exports = async (client, message) => {
 
 	const command =
 		client.commands.get(cmd) ||
-		client.commands.find((col) => col.aliases && col.aliases.includes(cmd));
+		client.commands.find(col => col.aliases && col.aliases.includes(cmd));
 
 	if (!command) return;
 
@@ -77,7 +77,7 @@ module.exports = async (client, message) => {
 							)
 					]
 				})
-				.then((msg) => setTimeout(() => msg.delete(), 1000 * 5));
+				.then(msg => setTimeout(() => msg.delete(), 1000 * 5));
 		}
 	}
 	time_stamps.set(message.author.id, current_time);
@@ -127,19 +127,37 @@ module.exports = async (client, message) => {
 
 	if (command.permissions.length) {
 		let invalidPermissionsFlags = [];
+		let invalidGuildFlags = [];
 
 		for (const permission of command.permissions) {
 			if (!permissionsFlags.includes(permission)) {
 				return console.log(`Invalid Permission Node: "${permission}"`);
 			}
 
-			if (!message.member.permissions.has(permission)) {
+			if (!message.guild.me.permissions.has(permission)) {
+				message.delete();
+				invalidGuildFlags.push(permission);
+			} else if (!message.member.permissions.has(permission)) {
 				message.delete();
 				invalidPermissionsFlags.push(permission);
 			}
 		}
 
-		if (invalidPermissionsFlags.length) {
+		if (invalidGuildFlags.length) {
+			return message.reply({
+				embeds: [
+					new MessageEmbed()
+						.setColor(process.env.REDHEX)
+						.setDescription(
+							`**I don't have the required permissions to use this command**`
+						)
+						.addField(
+							"Required Permissions",
+							`\`${invalidPermissionsFlags.join(", ")}\``
+						)
+				]
+			});
+		} else if (invalidPermissionsFlags.length) {
 			return message.reply({
 				embeds: [
 					new MessageEmbed()

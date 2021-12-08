@@ -7,6 +7,13 @@ const chalk = require("chalk");
  */
 
 module.exports = client => {
+	client.guilds.cache.forEach(guild => {
+		if (!guild.me.permissions.has("ADMINISTRATOR")) {
+			return;
+		}
+		return guild;
+	});
+
 	client?.manager?.init(client.user.id);
 
 	console.log(
