@@ -33,7 +33,7 @@ const test = false;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
-process.on("unhandledRejection", reason => {
+process.on("unhandledRejection", err => {
 	console.log(err);
 });
 
