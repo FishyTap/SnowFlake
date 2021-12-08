@@ -33,6 +33,13 @@ const test = false;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
+client.guilds.cache.forEach(guild => {
+	if (!guild.me.permissions.has("ADMINISTRATOR")) {
+		return;
+	}
+	return guild;
+});
+
 // Lavalink
 (async () => {
 	const { Manager } = require("erela.js");
