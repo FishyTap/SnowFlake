@@ -10,7 +10,7 @@ module.exports = {
 			name: "target",
 			description: "the user you want to target",
 			type: "USER",
-			required: true
+			required: false
 		}
 	],
 	/**
@@ -24,7 +24,8 @@ module.exports = {
 
 		let target = interaction.options.getUser("target");
 
-		let User = interaction.guild.members.cache.get(target.id);
+		let User =
+			interaction.guild.members.cache.get(target.id) || interaction.user;
 
 		let game = User.presence.game;
 		let status = User.presence.status;
@@ -36,7 +37,7 @@ module.exports = {
 
 		const roles = User.roles.cache
 			.sort((a, b) => b.position - a.position)
-			.map((role) => role.toString())
+			.map(role => role.toString())
 			.slice(0, -1);
 
 		let displayRoles;
