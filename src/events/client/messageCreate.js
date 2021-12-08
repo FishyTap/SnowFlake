@@ -135,16 +135,14 @@ module.exports = async (client, message) => {
 			}
 
 			if (!message.guild.me.permissions.has(permission)) {
-				message.delete();
 				invalidGuildFlags.push(permission);
 			} else if (!message.member.permissions.has(permission)) {
-				message.delete();
 				invalidPermissionsFlags.push(permission);
 			}
 		}
 
 		if (invalidGuildFlags.length) {
-			return message.reply({
+			return message.channel.send({
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.REDHEX)
@@ -153,12 +151,12 @@ module.exports = async (client, message) => {
 						)
 						.addField(
 							"Required Permissions",
-							`\`${invalidPermissionsFlags.join(", ")}\``
+							`\`${invalidGuildFlags.join(", ")}\``
 						)
 				]
 			});
 		} else if (invalidPermissionsFlags.length) {
-			return message.reply({
+			return message.channel.send({
 				embeds: [
 					new MessageEmbed()
 						.setColor(process.env.REDHEX)
