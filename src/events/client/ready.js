@@ -17,12 +17,21 @@ module.exports = client => {
 			chalk.bold.hex("#00FFFF")(`${client.user.username} is Online!`)
 	);
 
+	const presence = ["/help", `${client.guilds.cache.size} Servers!`, "Music"];
+
+	const randomPresence = () => {
+		let index = Math.floor(Math.random() * presence.length);
+		return `${presence[index]}`;
+	};
+
+	setInterval(() => {
+		client.user.setActivity({
+			name: randomPresence(),
+			type: "LISTENING"
+		});
+	}, 1000 * 10);
+
 	client.user.setPresence({
 		status: "online"
-	});
-
-	client.user.setActivity({
-		name: `/help`,
-		type: "LISTENING"
 	});
 };

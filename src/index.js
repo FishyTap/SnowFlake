@@ -1,6 +1,6 @@
 console.clear();
 
-const { Client, Collection, Intents, MessageEmbed } = require("discord.js");
+const { Client, Collection, Intents } = require("discord.js");
 const path = require("path");
 const chalk = require("chalk");
 require("dotenv").config();
@@ -29,7 +29,7 @@ client.snipes = new Collection();
 
 require(path.join(__dirname, "./loaders/loader"))(client);
 
-const test = false;
+const test = true;
 
 client.login(test == false ? process.env.TOKEN : process.env.TEST);
 
