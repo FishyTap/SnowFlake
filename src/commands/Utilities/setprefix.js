@@ -50,7 +50,7 @@ module.exports = {
 					}
 				});
 
-				data.save();
+				await data.save();
 
 				return message.channel.send({
 					embeds: [
@@ -106,7 +106,7 @@ module.exports = {
 				}
 			});
 
-			data.save();
+			await data.save();
 
 			message.channel.send({
 				embeds: [

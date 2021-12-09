@@ -10,6 +10,12 @@ const schema = mongoose.Schema({
 			type: String,
 			required: false
 		}
+	},
+	features: {
+		autoTranslate: {
+			type: String,
+			default: "false"
+		}
 	}
 });
 

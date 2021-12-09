@@ -7,14 +7,14 @@ module.exports = {
 	 * @param {Message} message
 	 * @returns
 	 */
-	customPrefix: async (message) => {
+	customPrefix: async message => {
 		let custom;
 
 		const data = await schema
 			.findOne({ guildId: message.guild.id })
 			.catch(() => {});
 
-		if (data) {
+		if (data?.config?.prefix) {
 			custom = data?.config?.prefix;
 		} else {
 			custom = process.env.PREFIX;

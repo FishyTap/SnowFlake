@@ -1,16 +1,23 @@
 const { Client, MessageEmbed, Util } = require("discord.js");
 const DL = require("detectlanguage");
-const detectLanguage = new DL("c42820ee777e3f8144765a493ea25283"); // "53c19b5a229a6f9f6805e3a4e62d54da"
+const detectLanguage = new DL("53c19b5a229a6f9f6805e3a4e62d54da"); // "c42820ee777e3f8144765a493ea25283"
 const translate = require("@iamtraction/google-translate");
 const isoCoverter = require("iso-language-converter");
-
+const schema = require("../mongo/schemas/guilds");
+const { create } = require("../mongo/functions/guilds/create");
 /**
  *
  * @param {Client} client
  */
 
-module.exports = (client) => {
-	client.on("messageCreate", async (message) => {
+module.exports = client => {
+	client.on("messageCreate", async message => {
+		let data = await schema.findOne({ guildId: message.guild.id });
+
+		if (!data) data = await create(client, message.guild.id);
+
+		if (data.features.autoTranslate == "false") return;
+
 		try {
 			if (message.author.bot) return;
 
@@ -45,14 +52,14 @@ module.exports = (client) => {
 			if (counter >= 1) {
 				await message.react(emoji);
 
-				let filter = (reaction) => reaction.emoji.name == emoji.name;
+				let filter = reaction => reaction.emoji.name == emoji.name;
 
 				let collector = message.createReactionCollector({
 					filter,
 					max: 1
 				});
 
-				collector.on("collect", async (reaction) => {
+				collector.on("collect", async reaction => {
 					reaction.users.remove();
 
 					message.channel.send({
