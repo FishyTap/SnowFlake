@@ -22,6 +22,7 @@ client.owner = {
 	id: "835037519786803251"
 };
 
+client.prefix = "/";
 client.commands = new Collection();
 client.interactions = new Collection();
 client.afk = new Collection();
@@ -52,8 +53,8 @@ process.on("uncaughtExceptionMonitor", err => {
 	client.manager = new Manager({
 		nodes: [
 			{
-				host: "lavaweed.herokuapp.com", // disbotlistlavalink.ml
-				password: "lavapass", // LAVA
+				host: "disbotlistlavalink.ml", // lavaweed.herokuapp.com
+				password: "LAVA", // lavapass
 				port: 443,
 				retryDelay: 3000,
 				secure: true

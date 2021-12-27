@@ -16,7 +16,7 @@
     "delay": "^5.0.0",
     "detectlanguage": "^2.0.0",
     "discord-rpc": "^4.0.1",
-    "discord.js": "^13.2.0-dev.1630973087.f57791c",
+    "discord.js": "^13.5.0-dev.1640563809.d0c3961",
     "dotenv": "^10.0.0",
     "erela.js": "^2.3.3",
     "erela.js-apple": "^1.2.6",

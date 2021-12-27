@@ -192,7 +192,7 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 		}
 
 		if (pages.length > 1) {
-			row.components.forEach((x) => x.setDisabled(false));
+			row.components.forEach(x => x.setDisabled(false));
 			let msg = message.channel
 				.send({
 					embeds: [
@@ -200,15 +200,15 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 					],
 					components: [row]
 				})
-				.then(async (Msg) => {
-					const ifilter = (i) => i.user.id === message.author.id;
+				.then(async Msg => {
+					const ifilter = i => i.user.id === message.author.id;
 
 					const collector = Msg.createMessageComponentCollector({
 						filter: ifilter,
 						time: timeOut
 					});
 
-					collector.on("collect", async (interaction) => {
+					collector.on("collect", async interaction => {
 						if (interaction.customId === "-2") {
 							index = 0;
 
@@ -260,9 +260,9 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 						}
 					});
 
-					collector.on("end", async (interaction) => {
+					collector.on("end", async interaction => {
 						try {
-							await row.components.forEach((x) =>
+							await row.components.forEach(x =>
 								x.setDisabled(true)
 							);
 
@@ -284,7 +284,7 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 				});
 			return msg;
 		} else {
-			row.components.forEach((x) => x.setDisabled(true));
+			row.components.forEach(x => x.setDisabled(true));
 			let msg = message.channel.send({
 				embeds: [pages[0]],
 				components: [row]
@@ -464,7 +464,7 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 		}
 
 		if (pages.length > 1) {
-			row.components.forEach((x) => x.setDisabled(false));
+			row.components.forEach(x => x.setDisabled(false));
 			let msg = message
 				.editReply({
 					embeds: [
@@ -472,15 +472,15 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 					],
 					components: [row]
 				})
-				.then(async (Msg) => {
-					const ifilter = (i) => i.user.id === message.user.id;
+				.then(async Msg => {
+					const ifilter = i => i.user.id === message.user.id;
 
 					const collector = Msg.createMessageComponentCollector({
 						filter: ifilter,
 						time: timeOut
 					});
 
-					collector.on("collect", async (interaction) => {
+					collector.on("collect", async interaction => {
 						if (interaction.customId === "-2") {
 							index = 0;
 
@@ -532,9 +532,9 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 						}
 					});
 
-					collector.on("end", async (interaction) => {
+					collector.on("end", async interaction => {
 						try {
-							await row.components.forEach((x) =>
+							await row.components.forEach(x =>
 								x.setDisabled(true)
 							);
 
@@ -542,7 +542,7 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 								components: [row]
 							});
 						} catch {
-							await interaction.followUp({
+							await interaction.editReply({
 								embeds: [
 									new MessageEmbed()
 										.setColor(process.env.REDHEX)
@@ -556,7 +556,7 @@ const Pagination = async (message, pages, buttons, timeOut, required, int) => {
 				});
 			return msg;
 		} else {
-			row.components.forEach((x) => x.setDisabled(true));
+			row.components.forEach(x => x.setDisabled(true));
 			let msg = message.editReply({
 				embeds: [pages[0]],
 				components: [row]
