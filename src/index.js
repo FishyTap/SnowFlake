@@ -53,7 +53,7 @@ process.on("uncaughtExceptionMonitor", err => {
 	client.manager = new Manager({
 		nodes: [
 			{
-				host: "disbotlistlavalink.ml", // lavaweed.herokuapp.com
+				host: "lavaweed.herokuapp.com", // disbotlistlavalink.ml
 				password: "LAVA", // lavapass
 				port: 443,
 				retryDelay: 3000,
