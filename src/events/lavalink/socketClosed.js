@@ -1,4 +1,4 @@
-const { Client } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 const { Player } = require("erela.js");
 const chalk = require("chalk");
 
@@ -10,9 +10,18 @@ const chalk = require("chalk");
  */
 
 module.exports = async (client, player, payload) => {
-	if (payload.byRemote == true) {
-		if (player.twentyFourSeven) return;
-		else player.destroy();
-	}
-	console.log(chalk.bold.red(`Socket closed ==> ${payload.reason}`));
+  if (payload.byRemote == true) {
+    if (player.twentyFourSeven) return;
+    else {
+      player.destroy();
+      await client.channels.cache.get(player.textChannel).send({
+        embeds: [
+          new MessageEmbed()
+            .setColor(process.env.REDHEX)
+            .setDescription(`**Socket Error**`),
+        ],
+      });
+    }
+  }
+  console.log(chalk.bold.red(`Socket closed ==> ${payload.reason}`));
 };

@@ -1,7 +1,6 @@
 const { MessageEmbed, Client } = require("discord.js");
 const { Player, TrackUtils } = require("erela.js");
 const chalk = require("chalk");
-const pMs = require("pretty-ms");
 
 /**
  *
@@ -11,15 +10,12 @@ const pMs = require("pretty-ms");
  */
 
 module.exports = async (client, player, track) => {
-	const channel = client.channels.cache.get(player.textChannel);
-	channel.send({
-		embeds: [
-			new MessageEmbed()
-				.setColor(process.env.SIGHEX)
-				.setDescription(
-					`**Now playing [${track.title}](${track.uri})**`
-				)
-		]
-	});
-	if (!player.voiceChannel) player.destroy();
+  const channel = client.channels.cache.get(player.textChannel);
+  channel.send({
+    embeds: [
+      new MessageEmbed()
+        .setColor(process.env.SIGHEX)
+        .setDescription(`**Now playing [${track.title}](${track.uri})**`),
+    ],
+  });
 };

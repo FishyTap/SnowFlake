@@ -11,13 +11,12 @@ const chalk = require("chalk");
  */
 
 module.exports = async (client, player, track, payload) => {
-	const channel = client.channels.cache.get(player.textChannel);
-	channel.send({
-		embeds: [
-			new MessageEmbed()
-				.setColor(process.env.REDHEX)
-				.setDescription("**The track got stuck**")
-		]
-	});
-	if (!player.voiceChannel) player.destroy();
+  const channel = client.channels.cache.get(player.textChannel);
+  channel.send({
+    embeds: [
+      new MessageEmbed()
+        .setColor(process.env.REDHEX)
+        .setDescription("**The track got stuck**"),
+    ],
+  });
 };

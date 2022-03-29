@@ -11,16 +11,21 @@ const chalk = require("chalk");
  */
 
 module.exports = async (client, player, oldChannel, newChannel) => {
-	player.voiceChannel = client.channels.cache.get(newChannel);
+  const channel = client.channels.cache.get(newChannel);
 
-	const channel = client.channels.cache.get(player.textChannel);
-	channel.send({
-		embeds: [
-			new MessageEmbed()
-				.setColor(process.env.SIGHEX)
-				.setDescription(
-					`**I have been moved from  <#${oldChannel}>  to  <#${newChannel}>**`
-				)
-		]
-	});
+  if (channel.members >= 1) {
+    player.pause(false);
+  }
+  player.pause(true);
+  player.setVoiceChannel(channel);
+
+  await client.channels.cache.get(player.textChannel).send({
+    embeds: [
+      new MessageEmbed()
+        .setColor(process.env.SIGHEX)
+        .setDescription(
+          `**I have been moved from  <#${oldChannel}>  to  <#${newChannel}>**`
+        ),
+    ],
+  });
 };

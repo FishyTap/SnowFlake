@@ -1,270 +1,215 @@
 const {
-	Client,
-	CommandInteraction,
-	MessageActionRow,
-	MessageButton,
-	MessageEmbed
+  Client,
+  CommandInteraction,
+  MessageActionRow,
+  MessageButton,
+  MessageEmbed,
 } = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 
 const {
-	capitalizeFirstLetter
+  capitalizeFirstLetter,
 } = require("../../../utils/CapitalizeFirstLetter");
 
+const categoryEmojis = {
+  ADMINISTRATOR: "🔒",
+  DEVELOPER: "🌐",
+  FUN: "🎮",
+  INFORMATION: "🔎",
+  MUSIC: "🎧",
+  UTILITIES: "⚙",
+  ECONOMY: "💳",
+};
+
 module.exports = {
-	name: "help",
-	description:
-		"Displays the help panel or shows the datails of a specific command",
-	type: "CHAT_INPUT",
-	options: [
-		{
-			name: "input",
-			description: "the command you want to the datails of",
-			type: "STRING",
-			required: false
-		}
-	],
-	/**
-	 * @param {Client} client
-	 * @param {CommandInteraction} interaction
-	 */
-	callbacks: async (client, interaction) => {
-		await interaction.deferReply({
-			ephemeral: false
-		});
+  name: "help",
+  description:
+    "Displays the help panel or shows the datails of a specific command",
+  type: "CHAT_INPUT",
+  options: [
+    {
+      name: "input",
+      description: "the command you want to the datails of",
+      type: "STRING",
+      required: false,
+    },
+  ],
+  /**
+   * @param {Client} client
+   * @param {CommandInteraction} interaction
+   */
+  callbacks: async (client, interaction) => {
+    await interaction.deferReply({
+      ephemeral: false,
+    });
 
-		let input = interaction.options.getString("input");
+    let input = interaction.options.getString("input");
 
-		let categoryEmojis = new Object();
+    if (!input) {
+      let categories = [];
 
-		categoryEmojis = {
-			ADMINISTRATION: "🔒",
-			DEVELOPER: "🌐",
-			FUN: "🎮",
-			INFORMATION: "🔎",
-			MUSIC: "🎧",
-			UTILITIES: "⚙",
-			ECONOMY: "💳"
-		};
+      fs.readdirSync(path.join(__dirname, "..")).forEach((dir) => {
+        let data = new Object();
 
-		if (!input) {
-			let categories = [];
+        data = {
+          name: `**${categoryEmojis[dir.toUpperCase()]} ${capitalizeFirstLetter(
+            dir.toLowerCase()
+          )}**`,
+          value: `\`\`\`${client.prefix}help ${dir.toLowerCase()}\`\`\``,
+          inline: true,
+        };
 
-			fs.readdirSync(
-				path.join(__dirname, "..", "..", "..", "commands")
-			).forEach((dir) => {
-				if (
-					dir == "Developer" &&
-					interaction.user.id !== "835037519786803251"
-				)
-					return;
-				let data = new Object();
+        categories.push(data);
+      });
 
-				data = {
-					name: `**${
-						categoryEmojis[dir.toUpperCase()]
-					} ${capitalizeFirstLetter(dir.toLowerCase())}**`,
-					value: `\`\`\`${
-						client.prefix
-					}help ${dir.toLowerCase()}\`\`\``,
-					inline: true
-				};
+      let row = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setLabel("Invite")
+          .setStyle("LINK")
+          .setURL(
+            `https://discord.com/api/oauth2/authorize?client_id=${client.application.id}&permissions=8&scope=bot%20applications.commands`
+          )
+      );
 
-				categories.push(data);
-			});
+      let embed = new MessageEmbed()
+        .setColor(process.env.SIGHEX)
+        .setTitle("📫 **Need help?**")
+        .setDescription(
+          `${[
+            `**SnowFlake is a Multi-Purpose bot with many Accessibilities and Features!**`,
+            `\u200b`,
+            `**Use \`${client.prefix}help [input]\`**`,
+            `> **Input:** *A command or category name*`,
+          ].join("\n")}`
+        )
+        .addFields(categories);
 
-			let row = new MessageActionRow().addComponents(
-				new MessageButton()
-					.setLabel("Invite")
-					.setStyle("LINK")
-					.setURL(
-						`https://discord.com/api/oauth2/authorize?client_id=${client.application.id}&permissions=8&scope=bot%20applications.commands`
-					)
-			);
+      interaction.editReply({
+        embeds: [embed],
+        components: [row],
+      });
+    } else {
+      let dirs = [];
+      let commands = [];
 
-			let embed = new MessageEmbed()
-				.setColor(process.env.SIGHEX)
-				.setTitle("📫 **Need help?**")
-				.setDescription(
-					`${[
-						`**SnowFlake is a Multi-Purpose bot with many Accessibilities and Features!**`,
-						`\u200b`,
-						`**My current prefix in this guild is \`${client.prefix}\`**`,
-						`**Use \`${client.prefix}help\` followed by a command or category name to get more information about it**`
-					].join("\n")}`
-				)
-				.addFields(categories)
-				.addFields({
-					name: "🏷 Soon",
-					value: "```...```",
-					inline: true
-				});
+      fs.readdirSync(path.join(__dirname, "..")).forEach((dir) => {
+        dirs.push(`${dir.toLowerCase()}`);
 
-			interaction.editReply({
-				embeds: [embed],
-				components: [row]
-			});
-		} else {
-			let dirs = [];
-			let commands = [];
+        const cmd = fs
+          .readdirSync(path.join(__dirname, "..", dir))
+          .filter((files) => files.endsWith(".js"));
 
-			fs.readdirSync(
-				path.join(__dirname, "..", "..", "..", "commands")
-			).forEach((dir) => {
-				if (
-					dir == "Developer" &&
-					interaction.user.id !== "835037519786803251"
-				)
-					return;
+        const cmds = cmd.map((command) => {
+          let file = require(path.join(__dirname, "..", dir, command));
 
-				dirs.push(`${dir.toLowerCase()}`);
+          if (!file.name) return "No name provided";
 
-				const cmd = fs
-					.readdirSync(
-						path.join(__dirname, "..", "..", "..", "commands", dir)
-					)
-					.filter((files) => files.endsWith(".js"));
+          let name = file.name.replace(".js", "");
 
-				const cmds = cmd.map((command) => {
-					let file = require(path.join(
-						__dirname,
-						"..",
-						"..",
-						"..",
-						"commands",
-						dir,
-						command
-					));
+          return `\`${name}\``;
+        });
 
-					if (!file.name) return "No name provided";
+        let desc = new Object();
 
-					let name = file.name.replace(".js", "");
+        desc = {
+          ADMINISTRATION:
+            "These are the Administration commands. Only the staffs can use these commands regarding their permissions!",
+          FUN: "These are the Fun commands. You can play games and have fun with your friends!",
+          INFORMATION:
+            "These are the Information commands. You can use these commands to get information that you are looking for!",
+          MUSIC:
+            "These are the Music commands. You can play any song or playlist that you want!",
+          ECONOMY:
+            "These are the Economy commands. You can earn money but make sure to manage them well!",
+          UTILITIES:
+            "These are the Utilities commands. Some of the commands requires you to have certain permissions before using!",
+        };
 
-					return `\`${name}\``;
-				});
+        let data = new Object();
 
-				let desc = new Object();
+        data = {
+          name: `${capitalizeFirstLetter(dir.toLowerCase())}`,
+          value: cmds.length === 0 ? "NONE" : cmds.join(" "),
+          emoji: `${categoryEmojis[dir.toUpperCase()]}`,
+          description: desc[dir.toUpperCase()]
+            ? `${desc[dir.toUpperCase()]}`
+            : "NONE",
+          size: cmd.length,
+        };
 
-				desc = {
-					ADMINISTRATION:
-						"These are the Administration commands. Only the staffs can use these commands regarding their permissions!",
-					DEVELOPER:
-						"These are the Developer commands. Only the developers can use these commands!",
-					FUN: "These are the Fun commands. You can play games and have fun with your friends!",
-					INFORMATION:
-						"These are the Information commands. You can use these commands to get information that you are looking for!",
-					MUSIC: "These are the Music commands. You can play any song or playlist that you want!",
-					ECONOMY:
-						"These are the Economy commands. You can earn money but make sure to manage them well!",
-					UTILITIES:
-						"These are the Utilities commands. Some of the commands requires you to have certain permissions before using!"
-				};
+        commands.push(data);
+      });
 
-				let data = new Object();
+      if (dirs.includes(input.toLowerCase())) {
+        let index = dirs.indexOf(input.toLowerCase());
+        interaction.editReply({
+          embeds: [
+            new MessageEmbed()
+              .setColor(process.env.SIGHEX)
+              .setTitle(
+                `${commands[index].emoji} __**${commands[index].name} Commands**__`
+              )
+              .setDescription(`${commands[index].description}`)
+              .addFields({
+                name: `Commands [${commands[index].size}]`,
+                value: commands[index].value,
+              }),
+          ],
+        });
+      } else {
+        const cmd =
+          client.interactions.get(input.toLowerCase()) ||
+          client.interactions.find(
+            (col) => col.aliases && col.aliases.includes(input.toLowerCase())
+          );
 
-				data = {
-					name: `${capitalizeFirstLetter(dir.toLowerCase())}`,
-					value: cmds.length === 0 ? "NONE" : cmds.join(" "),
-					emoji: `${categoryEmojis[dir.toUpperCase()]}`,
-					description: desc[dir.toUpperCase()]
-						? `${desc[dir.toUpperCase()]}`
-						: "NONE",
-					size: cmd.length
-				};
+        if (!cmd) {
+          return interaction.editReply({
+            embeds: [
+              new MessageEmbed()
+                .setColor(process.env.SIGHEX)
+                .setDescription(`**Unknown Query**`),
+            ],
+          });
+        }
 
-				commands.push(data);
-			});
-
-			if (dirs.includes(input.toLowerCase())) {
-				let index = dirs.indexOf(input.toLowerCase());
-				interaction.editReply({
-					embeds: [
-						new MessageEmbed()
-							.setColor(process.env.SIGHEX)
-							.setTitle(
-								`${commands[index].emoji} __**${commands[index].name} Commands**__`
-							)
-							.setDescription(`${commands[index].description}`)
-							.addFields({
-								name: `Commands [${commands[index].size}]`,
-								value: commands[index].value
-							})
-					]
-				});
-			} else {
-				const cmd =
-					client.commands.get(input.toLowerCase()) ||
-					client.commands.find(
-						(col) =>
-							col.aliases &&
-							col.aliases.includes(input.toLowerCase())
-					);
-
-				if (!cmd) {
-					return interaction.editReply({
-						embeds: [
-							new MessageEmbed()
-								.setColor(process.env.SIGHEX)
-								.setDescription(`**Unknown Query**`)
-						]
-					});
-				}
-
-				interaction.editReply({
-					embeds: [
-						new MessageEmbed()
-							.setColor(process.env.SIGHEX)
-							.setTitle(
-								`__**${capitalizeFirstLetter(
-									cmd.name
-								)} Command**__`
-							)
-							.addField(
-								"**COMMAND:**",
-								cmd.name
-									? `**\`${cmd.name}\`**`
-									: "**`No name for this command`**",
-								true
-							)
-							.addField(
-								"**ALIASES:**",
-								!cmd.aliases.length <= 0
-									? `**\`${cmd.aliases.join("` `")}\`**`
-									: "**`No aliases for this command`**",
-								true
-							)
-							.addField(
-								"**USAGE:**",
-								cmd.usage
-									? `**\`${client.prefix}${cmd.name} ${cmd.usage}\`**`
-									: `**\`${client.prefix}${cmd.name}\`**`,
-								true
-							)
-							.addField(
-								"**COOLDOWN:**",
-								cmd.cooldown
-									? `**\`${cmd.cooldown} seconds\`**`
-									: `**\`0 seconds\`**`,
-								true
-							)
-							.addField(
-								"**PERMISSIONS:**",
-								!cmd.permissions.length <= 0
-									? `**\`${cmd.permissions.join("` `")}\`**`
-									: "**`None`**",
-								true
-							)
-							.addField(
-								"**DESCRIPTION:**",
-								cmd.description
-									? `**\`${cmd.description}\`**`
-									: "**`No description for this command`**",
-								true
-							)
-					]
-				});
-			}
-		}
-	}
+        interaction.editReply({
+          embeds: [
+            new MessageEmbed()
+              .setColor(process.env.SIGHEX)
+              .setTitle(`__**${capitalizeFirstLetter(cmd.name)} Command**__`)
+              .addField(
+                "**COMMAND:**",
+                cmd.name
+                  ? `**\`${cmd.name}\`**`
+                  : "**`No name for this command`**",
+                true
+              )
+              .addField(
+                "**COOLDOWN:**",
+                cmd.cooldown
+                  ? `**\`${cmd.cooldown} seconds\`**`
+                  : `**\`none\`**`,
+                true
+              )
+              .addField(
+                "**PERMISSIONS:**",
+                !cmd.permissions?.length <= 0
+                  ? `**\`${cmd.permissions.join("` `")}\`**`
+                  : "**`None`**",
+                true
+              )
+              .addField(
+                "**DESCRIPTION:**",
+                cmd.description
+                  ? `**\`${cmd.description}\`**`
+                  : "**`No description for this command`**",
+                true
+              ),
+          ],
+        });
+      }
+    }
+  },
 };

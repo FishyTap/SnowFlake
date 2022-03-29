@@ -8,21 +8,20 @@ const { Client, Message, MessageEmbed } = require("discord.js");
  */
 
 module.exports = async (client, message) => {
-	const mention = new RegExp(`^<@!?${client.user.id}>( |)$`);
+  const mention = new RegExp(`^<@!?${client.user.id}>( |)$`);
 
-	if (message.content.match(mention)) {
-		message.channel.send({
-			embeds: [
-				new MessageEmbed()
-					.setColor(process.env.SIGHEX)
-					.setTitle("🛡 **Who pinged me???**")
-					.setDescription(
-						`${[
-							`**My prefix is \`${client.prefix}\`**`,
-							`**Use \`${client.prefix}help\` to attain more information!**`
-						].join("\n")}`
-					)
-			]
-		});
-	}
+  if (message.content.match(mention)) {
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setColor(process.env.SIGHEX)
+          .setTitle("🛡 **Who pinged me???**")
+          .setDescription(
+            `${[
+              `**Use \`${client.prefix}help\` to attain more information!**`,
+            ].join("\n")}`
+          ),
+      ],
+    });
+  }
 };
