@@ -52,9 +52,9 @@ process.on("uncaughtExceptionMonitor", (err) => {
   client.manager = new Manager({
     nodes: [
       {
-        host: "losingtime.dpaste.org",
+        host: "lava.link:80",
         port: 2124,
-        password: "SleepingOnTrains",
+        password: "key",
         secure: false,
         retryDelay: 5000,
       },
