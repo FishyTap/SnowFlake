@@ -17,7 +17,7 @@ module.exports = async (client, player, payload) => {
       await client.channels.cache.get(player.textChannel).send({
         embeds: [
           new MessageEmbed()
-            .setColor(process.env.REDHEX)
+            .setColor(process.env.ERRORHEX)
             .setDescription(`**Socket Error**`),
         ],
       });
